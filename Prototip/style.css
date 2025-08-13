@@ -1,0 +1,130 @@
+/* --- UPROŠĆENI CSS ZA PROTOTIP --- */
+
+/* Osnovni stilovi */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+h1, h2, h3 {
+    color: #000;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+a {
+    color: #0000FF;
+}
+
+/* Header */
+.main-header {
+    background-color: #ddd;
+    padding: 10px 0;
+    border-bottom: 2px solid #aaa;
+}
+.main-header .container {
+    margin: 0 auto;
+    border: none;
+    display: table;
+    width: 800px;
+}
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #000;
+}
+.main-header nav {
+    float: right;
+}
+.main-header nav a {
+    margin-left: 15px;
+}
+
+/* Forme i dugmad */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="date"],
+input[type="search"],
+textarea {
+    width: 98%;
+    padding: 8px;
+    border: 1px solid #999;
+}
+
+.btn {
+    background-color: #e0e0e0;
+    color: #000;
+    padding: 10px 15px;
+    border: 1px solid #999;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* Lista oglasa ili korisnika */
+.item-list {
+    border: 1px solid #ccc;
+    height: 300px;
+    overflow-y: scroll;
+    padding: 10px;
+}
+.item {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+.item:last-child {
+    border-bottom: none;
+}
+
+/* Profilna stranica */
+.profile-sidebar {
+    float: left;
+    width: 200px;
+    margin-right: 20px;
+}
+.profile-sidebar img {
+    width: 150px;
+    height: 150px;
+    border: 1px solid #ccc;
+}
+.profile-main {
+    overflow: hidden;
+}
+
+.form-group-inline {
+    display: flex;
+    align-items: center; 
+}
+
+.radio-options {
+    flex-grow: 1;
+    text-align: center;
+}
+
+
+.radio-options label {
+    display: inline-block; 
+    margin: 0 10px;
+}
