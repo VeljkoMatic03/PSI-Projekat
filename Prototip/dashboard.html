@@ -1,3 +1,4 @@
+<!--Luka Zdravic-->
 <!DOCTYPE html>
 <html lang="sr">
 <head>
@@ -17,11 +18,8 @@
         </div>
     </header>
     <main>
-        <!-- Dashboard za Studenta -->
         <div id="student-dashboard-view" class="view"></div>
-        <!-- Dashboard za Tutora -->
         <div id="tutor-dashboard-view" class="view"></div>
-        <!-- Dashboard za Admina -->
         <div id="admin-dashboard-view" class="view"></div>
     </main>
     
@@ -30,12 +28,10 @@
             const userRole = localStorage.getItem('userRole');
 
             if (!userRole) {
-                // Ako korisnik nije ulogovan, vrati ga na login stranicu
                 window.location.href = 'login.html';
                 return;
             }
-            
-            // Prikazi odgovarajuci dashboard
+
             const welcomeMessage = document.getElementById('welcome-message');
             const studentView = document.getElementById('student-dashboard-view');
             const tutorView = document.getElementById('tutor-dashboard-view');
@@ -77,8 +73,6 @@
                         </table>
                     </div>`;
             }
-
-            // Funkcionalnost odjave
             document.getElementById('logout-btn').addEventListener('click', () => {
                 localStorage.removeItem('userRole');
                 window.location.href = 'index.html';
