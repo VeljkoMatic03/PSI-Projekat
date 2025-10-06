@@ -1,0 +1,86 @@
+<!--Luka Zdravic-->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontrolna Tabla - StudyBuddy</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <header id="app-header">
+        <div class="container">
+            <a href="#" class="logo">StudyBuddy</a>
+            <div id="user-info">
+                <span id="welcome-message"></span>
+                <button id="logout-btn" class="btn btn-inline btn-danger">Odjavi se</button>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div id="student-dashboard-view" class="view"></div>
+        <div id="tutor-dashboard-view" class="view"></div>
+        <div id="admin-dashboard-view" class="view"></div>
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const userRole = localStorage.getItem('userRole');
+
+            if (!userRole) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const welcomeMessage = document.getElementById('welcome-message');
+            const studentView = document.getElementById('student-dashboard-view');
+            const tutorView = document.getElementById('tutor-dashboard-view');
+            const adminView = document.getElementById('admin-dashboard-view');
+
+            if (userRole === 'student') {
+                welcomeMessage.textContent = 'Dobrodošli, Studente!';
+                studentView.classList.add('active');
+                studentView.innerHTML = `
+                    <div class="container">
+                        <div class="dashboard-header"><h2>Moji oglasi</h2><button class="btn btn-inline btn-primary">Novi oglas</button></div>
+                        <div class="ads-grid">
+                           <div class="ad-card"><h3>Potrebna pomoć za projekat iz Baza Podataka</h3><span class="category">Помоћ при изради пројекта</span></div>
+                        </div>
+                    </div>`;
+            } else if (userRole === 'tutor') {
+                welcomeMessage.textContent = 'Dobrodošli, Tutore!';
+                tutorView.classList.add('active');
+                tutorView.innerHTML = `
+                    <div class="container">
+                        <div class="dashboard-header"><h2>Dostupni oglasi</h2><select><option>Sortiraj...</option></select></div>
+                        <div class="ads-grid">
+                           <div class="ad-card"><h3>Pomoć za kolokvijum iz Matematike 2</h3><span class="category">Помоћ при учењу</span></div>
+                           <div class="ad-card"><h3>Recenzija koda za PSI projekat</h3><span class="category">Рецензирање пројекта</span></div>
+                        </div>
+                    </div>`;
+            } else if (userRole === 'admin') {
+                welcomeMessage.textContent = 'Dobrodošli, Administratore!';
+                adminView.classList.add('active');
+                adminView.innerHTML = `
+                    <div class="container">
+                        <div class="dashboard-header"><h2>Upravljanje korisnicima</h2></div>
+                        <table class="admin-table">
+                            <thead><tr><th>ID</th><th>Ime</th><th>Uloga</th><th>Akcije</th></tr></thead>
+                            <tbody>
+                                <tr><td>1</td><td>Pera Perić</td><td>Student</td><td><button class="btn btn-inline btn-danger">Ukloni</button></td></tr>
+                                <tr><td>2</td><td>Mika Mikić</td><td>Tutor</td><td><button class="btn btn-inline btn-success">Verifikuj</button> <button class="btn btn-inline btn-danger">Ukloni</button></td></tr>
+                            </tbody>
+                        </table>
+                    </div>`;
+            }
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                localStorage.removeItem('userRole');
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>

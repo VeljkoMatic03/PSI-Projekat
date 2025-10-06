@@ -1,0 +1,33 @@
+<!--Luka Zdravic-->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <title>Uredi CV</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <a href="index.html" class="logo">StudyBuddy</a>
+            <nav><a href="dashboard-tutor.html">Nazad na tablu</a></nav>
+        </div>
+    </header>
+    <main class="container">
+        <h1>Uredi CV</h1>
+        <form action="dashboard-tutor.html">
+            <div class="form-group"><label>Ime</label><input type="text" required></div>
+            <div class="form-group"><label>Prezime</label><input type="text" required></div>
+            <div class="form-group"><label>Slika</label><input type="file" required></div>
+            <div class="form-group"><label>O meni</label><textarea rows="3" required></textarea></div>
+            <div class="form-group"><label>Edukacija</label><textarea rows="3" required></textarea></div>
+            <div class="form-group"><label>Projekti</label><textarea rows="3" required></textarea></div>
+            <div class="form-group"><label>Iskustvo</label><textarea rows="3" required></textarea></div>
+            <button type="submit" class="btn">Sačuvaj</button>
+        </form>
+    </main>
+</body>
+</html>

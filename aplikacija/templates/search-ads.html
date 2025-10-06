@@ -1,0 +1,87 @@
+<!--Luka Zdravic-->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <title>Pretraga Oglasa</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <a href="index.html" class="logo">StudyBuddy</a>
+            <nav><a href="dashboard-student.html">Nazad na tablu</a></nav>
+        </div>
+    </header>
+    <main class="container">
+        <h1>Pretraga oglasa</h1>
+        <form>
+            <input type="search" placeholder="Pretraži...">
+            <button type="button" class="btn" id="open-filter-btn">Filter</button>
+        </form>
+        <hr>
+        <div class="item-list">
+            <div class="item">
+                <h3><a href="view-ad.html">Potrebna pomoć za PSI projekat</a></h3>
+                <p>Postavio: Marko Marković (Ocena: 4.5)</p>
+                <p>Tip pomoci: Pomoc pri izradi projekta</p>
+            </div>
+            <div class="item">
+                <h3><a href="view-ad.html">Tražim pomoć oko Matematike 2</a></h3>
+                <p>Postavio: Jelena Jelić (Ocena: 4.9)</p>
+                <p>Tip pomoci: Pomoc pri ucenju</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="filter-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Filteri</h2>
+            <form>
+                <div class="form-group">
+                    <label>Tip pomoći:</label>
+                    <div><label><input type="checkbox"> Pomoć pri izradi projekta</label></div>
+                    <div><label><input type="checkbox"> Pomoć pri učenju</label></div>
+                    <div><label><input type="checkbox"> Recenziranje projekta</label></div>
+                </div>
+                <div class="form-group">
+                    <label>Tag:</label>
+                    <input type="text" placeholder="Npr. python, psi, etf...">
+                </div>
+                <div class="form-group">
+                    <label>Minimalna ocena korisnika:</label>
+                    <input type="number" min="1" max="5" step="0.1" placeholder="Npr. 4.5">
+                </div>
+                <button type="button" class="btn" id="apply-filters-btn">Primeni filtere</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        var modal = document.getElementById("filter-modal");
+        var openBtn = document.getElementById("open-filter-btn");
+        var closeBtn = document.getElementsByClassName("close-btn")[0];
+        var applyBtn = document.getElementById("apply-filters-btn");
+
+        openBtn.onclick = function() {
+            modal.style.display = "block";
+        }
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+        applyBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+</html>

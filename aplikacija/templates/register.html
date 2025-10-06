@@ -1,0 +1,35 @@
+<!--Luka Zdravic-->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <title>Registracija</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Kreiraj nalog</h2>
+        <form action="login.html">
+            <div class="form-group"><label>Ime</label><input type="text" required></div>
+            <div class="form-group"><label>Prezime</label><input type="text" required></div>
+            <div class="form-group"><label>Email</label><input type="email" required></div>
+            <div class="form-group"><label>Datum rođenja</label><input type="date" required></div>
+            <div class="form-group"><label>Korisničko ime</label><input type="text" required></div>
+            <div class="form-group"><label>Lozinka</label><input type="password" required></div>
+            <div class="form-group"><label>Potvrdi lozinku</label><input type="password" required></div>
+            <div class="form-group form-group-inline">
+                <label>Ja sam:</label>
+                <div class="radio-options">
+                    <label><input type="radio" name="role" checked> Student</label>
+                    <label><input type="radio" name="role"> Tutor</label>
+                </div>
+            </div>
+            <button type="submit" class="btn">Registruj se</button>
+        </form>
+        <a href="login.html">Već imate nalog? Prijavite se</a>
+    </div>
+</body>
+</html>

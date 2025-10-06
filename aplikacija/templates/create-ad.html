@@ -1,0 +1,47 @@
+<!--Luka Zdravic-->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <title>Kreiraj Oglas</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <a href="index.html" class="logo">StudyBuddy</a>
+            <nav><a href="dashboard-student.html">Nazad na tablu</a></nav>
+        </div>
+    </header>
+    <main class="container">
+        <h1>Kreiraj novi oglas</h1>
+        <form action="dashboard-student.html">
+            <div class="form-group"><label>Naziv oglasa</label><input type="text"></div>
+            <div class="form-group">
+                <label>Predmet</label>
+                <input type="text" placeholder="Npr. Principi softverskog inženjerstva" required>
+            </div>
+            <div class="form-group">
+                <label>Tip pomoći</label>
+                <select required>
+                    <option value="" disabled selected>Izaberite tip pomoći...</option>
+                    <option value="pomoc_izrada">Pomoć pri izradi projekta</option>
+                    <option value="pomoc_ucenje">Pomoć pri učenju</option>
+                    <option value="recenziranje">Recenziranje projekta</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Opis</label><textarea rows="5"></textarea></div>
+            <div class="form-group">
+                <label>Prilozi (opciono)</label>
+                <div style="border:1px solid #999; padding: 20px; text-align:center;">Drag and drop polje</div>
+            </div>
+            <div class="form-group"><label>Tagovi</label><input type="text"></div>
+            <button type="submit" class="btn">Postavi oglas</button>
+            <a href="dashboard-student.html" class="btn">Odustani od oglasa</a>
+        </form>
+    </main>
+</body>
+</html>

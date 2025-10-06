@@ -1,0 +1,29 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ukloni Korisnika</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <a href="dashboard-admin.html" class="logo">StudyBuddy Admin</a>
+            <nav><a href="dashboard-admin.html">Nazad na tablu</a></nav>
+        </div>
+    </header>
+    <main class="container">
+        <h1>Uklanjanje korisnika</h1>
+        <form action="dashboard-admin.html">
+            <div class="form-group">
+                <label>Korisničko ime</label>
+                <input type="text">
+            </div>
+            <button type="submit" class="btn">Ukloni</button>
+        </form>
+    </main>
+</body>
+</html>
