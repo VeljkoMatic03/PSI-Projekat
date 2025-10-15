@@ -46,7 +46,11 @@ class Admin(models.Model):
 
 
 class Applied(models.Model):
+<<<<<<< PATCH SET (916e26 Shared app dodata u settings.py)
+    #pk = models.CompositePrimaryKey('idTag', 'idNotice')
+=======
     pk = models.CompositePrimaryKey('idTag', 'idNotice')
+>>>>>>> BASE      (2d7f79 Napravljen shared app koji sadrzi modele koje svi koriste)
     idtag = models.ForeignKey('Tag', models.CASCADE, db_column='idTag')  # Field name made lowercase.
     idnotice = models.ForeignKey('Notice', models.CASCADE, db_column='idNotice')  # Field name made lowercase.
 

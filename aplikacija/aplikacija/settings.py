@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'app_luka.apps.AppLukaConfig',
     'app_filip.apps.AppFilipConfig',
     'app_veljko.apps.AppVeljkoConfig',
+    'shared_app.apps.SharedAppConfig',
 ]
 
 MIDDLEWARE = [
