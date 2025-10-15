@@ -20,8 +20,9 @@
         <h1>Administratorska Tabla</h1>
         <h3>Akcije:</h3>
         <ul>
-            <li><a href="admin-verify-tutor.html">Verifikuj tutore</a></li>
-            <li><a href="admin-remove-user.html">Ukloni korisnika</a></li>
+            <li><a href="{% url 'verifyTutor' %}">Verifikuj tutore</a></li>
+            <li><a href="{% url 'removeUser' %}">Ukloni korisnika</a></li>
+            <li><a href="{% url 'admin:index' %}">Admin kontrolna tabla</a></li>
         </ul>
     </main>
 </body>

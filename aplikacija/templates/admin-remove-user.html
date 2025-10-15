@@ -6,24 +6,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Ukloni Korisnika</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
     <header class="main-header">
         <div class="container">
-            <a href="dashboard-admin.html" class="logo">StudyBuddy Admin</a>
-            <nav><a href="dashboard-admin.html">Nazad na tablu</a></nav>
+            <a href="{% url 'adminpanel' %}" class="logo">StudyBuddy Admin</a>
+            <nav><a href="{% url 'adminpanel' %}">Nazad na tablu</a></nav>
         </div>
     </header>
     <main class="container">
         <h1>Uklanjanje korisnika</h1>
-        <form action="dashboard-admin.html">
+        <form method="post">
+            {% csrf_token %}
             <div class="form-group">
                 <label>Korisničko ime</label>
-                <input type="text">
+                <input type="text" name="username">
             </div>
-            <button type="submit" class="btn">Ukloni</button>
+            <button type="submit" class="btn" name="search">Pretraži</button>
+            {% if msgnf != None %}
+                <p>{{ msgnf }}</p>
+            {% endif %}
         </form>
+        {% if user != None %}
+        <div>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ user.iduser }}">
+            <h3>{{ user.username }}</h3>
+            <button type="submit" class="btn" name="remove">Ukloni</button>
+        </form>
+        </div>
+        {% endif %}
+        {% if msg_user_deleted != None %}
+            <h2>{{ msg_user_deleted }}</h2>
+        {% endif %}
     </main>
 </body>
 </html>
