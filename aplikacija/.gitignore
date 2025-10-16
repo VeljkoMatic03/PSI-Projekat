@@ -1,4 +1,3 @@
-# Ignore Python caches and compiled files
 __pycache__/
 **/__pycache__/
 *.py[cod]
@@ -7,15 +6,10 @@ __pycache__/
 *.pyd
 *.cpython-*-*.pyc
 
-# Ignore Django settings (local config)
-
-# Ignore initial migration (if you don't want to track it)
 aplikacija/shared_app/migrations/0001_initial.py
 
-# Ignore IDE project files
 .idea/
 *.iml
 
-# Ignore Django migration caches but keep migration scripts
 **/migrations/__pycache__/
 !**/migrations/*.py
