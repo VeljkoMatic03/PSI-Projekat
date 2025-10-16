@@ -17,10 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from app_veljko.views import adminpanel, verifyTutor, removeUser
+from app_filip.views import homepage, register_user, login_user
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('admin_panel/', adminpanel, name='adminpanel'),
     path('admin_panel/verify/', verifyTutor, name='verifyTutor'),
     path('admin_panel/remove/', removeUser, name='removeUser'),
+    path('', homepage, name='homepage'),
+    path('register/', register_user, name='register'),
+    path('login/', login_user, name='login'),
+
 ]
