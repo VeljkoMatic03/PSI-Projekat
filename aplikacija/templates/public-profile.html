@@ -7,25 +7,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Profil Korisnika</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
     <header class="main-header">
         <div class="container">
-            <a href="index.html" class="logo">StudyBuddy</a>
+            <a href="{% url 'homepage' %}" class="logo">StudyBuddy</a>
             <nav><a href="search-ads.html">Nazad na pretragu</a></nav>
         </div>
     </header>
     <main class="container">
+        {% if myProfile %}
+            <span><h1>Moj profil</h1></span>
+        {% endif %}
         <div class="profile-sidebar">
-            <h2 style="border:none;">{Ime korisnika}</h2>
-            <p><b>Prosečna ocena:</b> 4.8 / 5</p>
+            {% if type == 'Student' or type == 'Tutor' %}
+            <h2 style="border:none;">{{ user.name }} {{ user.surname }}</h2>
+            {% endif %}
+            {% if not isRated %}
+                <p><b>Nema ocena za ovog korisnika</b></p>
+            {% else %}
+                <p><b>Prosečna ocena:  {{ avgRating }}</b></p>
+                <p><b>Broj recenzija: {{ countRating }}</b></p>
+            {% endif %}
             <button class="btn">Preuzmi CV</button>
             <p>*Dostupno samo kada je korisnik Tutor</p>
         </div>
         <div class="profile-main">
-            <h3>Biografija</h3>
-            <p>Biografija korisnika.</p>
+            {% if type == 'Student' %}
+            <h3>Prethodni oglasi:</h3>
+            {% elif type == 'Tutor' %}
+            <h3>Pomagao na:</h3>
+            {% endif %}
+            <div class="item-list">
+                {% if not notices %}
+                    <div class="item"><p>Nema dosadasnjih kolaboracija</p></div>
+                {% else %}
+                {% for notice in notices %}
+                    <div class="item">
+                        <h3>{{ notice.description }}</h3>
+                        <p>Tip: {{ notice.type }}</p>
+                        <p>Objavio: <b>{{ notice.idpublisher.iduser.username }}</b></p>
+                        {% if notice.idtutor %}
+                            <p>Pomogao: <b>{{ notice.idtutor.iduser.username }}</b></p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                {% endif %}
+            </div>
             <hr>
             <h3>Ocenjivanje saradnje (Vidi samo korisnik kad prekine saradnju sa tutorom)</h3>
             <p>Ocena (1-5): <input type="number" min="1" max="5" style="width: 50px;"></p>

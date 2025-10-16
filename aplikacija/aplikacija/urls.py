@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from app_veljko.views import adminpanel, verifyTutor, removeUser, logout_user
+from app_veljko.views import adminpanel, verifyTutor, removeUser, logout_user, public_profile
 from app_filip.views import homepage, register_user, login_user
 
 urlpatterns = [
@@ -28,4 +28,5 @@ urlpatterns = [
     path('register/', register_user, name='register'),
     path('login/', login_user, name='login'),
     path('logout/', logout_user, name='logout'),
+    path('profile/', public_profile, name='profile'),
 ]

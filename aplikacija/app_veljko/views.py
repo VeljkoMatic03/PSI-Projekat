@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from shared_app.models import MyUser, Verification, Tutor, Admin
+from shared_app.models import MyUser, Verification, Tutor, Admin, Student, Rating, Notice
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 
@@ -64,3 +64,71 @@ def removeUser(request):
 def logout_user(request):
     logout(request)
     return redirect('homepage')
+
+def public_profile(request):
+    username = request.GET.get("username")
+    user = None
+    type = None
+    myProfile = True
+    if username:
+        user = User.objects.filter(username=username)
+        if not user.exists():
+            return render(request, 'index.html')
+        user = MyUser.objects.get(username=username)
+        if Student.objects.filter(iduser=user).exists():
+            type = 'Student'
+            user = Student.objects.filter(iduser=user).first()
+        elif Tutor.objects.filter(iduser=user).exists():
+            type = 'Tutor'
+            user = Tutor.objects.filter(iduser=user).first()
+        elif Admin.objects.filter(iduser=user).exists():
+            return render(request, 'index.html')
+        myProfile = False
+    else:
+        user = request.user
+        if Student.objects.filter(iduser__username=user.username).exists():
+            type='Student'
+            user = Student.objects.filter(iduser__username=user.username).first()
+        elif Tutor.objects.filter(iduser__username=user.username).exists():
+            type='Tutor'
+            user = Tutor.objects.filter(iduser__username=user.username).first()
+        myProfile=True
+
+    avgRating = 0
+    isRated = False
+    countRating = 0
+    listOfRatings = Rating.objects.filter(idrateduser__username=user.iduser.username)
+    if not listOfRatings.exists():
+        isRated=False
+    else:
+        sumRating = 0
+        countRating = 0
+        for rating in listOfRatings:
+            sumRating += rating.value
+            countRating += 1
+        avgRating = sumRating / countRating
+        isRated = True
+
+    listOfNotices = []
+    if type == 'Student':
+        listOfNoticesQ = Notice.objects.filter(idpublisher__iduser=user.iduser)
+        if not listOfNoticesQ.exists():
+            listOfNotices = None
+        else:
+            for notice in listOfNoticesQ:
+                listOfNotices.append(notice)
+    elif type == 'Tutor':
+        listOfNoticesQ = Notice.objects.filter(idtutor__iduser=user.iduser)
+        if not listOfNoticesQ.exists():
+            listOfNotices = None
+        else:
+            for notice in listOfNoticesQ:
+                listOfNotices.append(notice)
+
+    return render(request, 'public-profile.html', {'user': user,
+                                                   'type': type,
+                                                   'myProfile': myProfile,
+                                                   'isRated': isRated,
+                                                   'avgRating': avgRating,
+                                                   'countRating': countRating,
+                                                   'notices': listOfNotices})
