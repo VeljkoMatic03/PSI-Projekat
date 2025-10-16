@@ -12,8 +12,8 @@
 <body>
     <header class="main-header">
         <div class="container">
-            <a href="dashboard-admin.html" class="logo">StudyBuddy Admin</a>
-            <nav><a href="index.html">Odjavi se</a></nav>
+            <a href="{% url 'adminpanel' %}" class="logo">StudyBuddy Admin</a>
+            <nav><a href="{% url 'logout' %}">Odjavi se</a></nav>
         </div>
     </header>
     <main class="container">

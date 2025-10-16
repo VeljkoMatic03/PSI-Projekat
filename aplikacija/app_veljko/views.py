@@ -1,5 +1,7 @@
-from django.shortcuts import render
-from shared_app.models import MyUser, Verification, Tutor
+from django.shortcuts import render, redirect
+from shared_app.models import MyUser, Verification, Tutor, Admin
+from django.contrib.auth.models import User
+from django.contrib.auth import logout
 
 # Create your views here.
 
@@ -33,9 +35,13 @@ def removeUser(request):
             username = request.POST.get("username")
             try:
                 user = MyUser.objects.get(username=username)
+                isAdmin = Admin.objects.filter(iduser__username=user.username).exists()
                 if user.isbanned == 1 or user.isactive == 0:
                     user = None
                     msgnf = 'Nema korisnika sa tim korisnickim imenom'
+                if isAdmin:
+                    user = None
+                    msgnf = 'Admin se ne moze ukloniti'
             except MyUser.DoesNotExist:
                 user = None
                 msgnf = 'Nema korisnika sa tim korisnickim imenom'
@@ -46,9 +52,15 @@ def removeUser(request):
                 user.isbanned = 1
                 user.isactive = 0
                 user.save()
+            authUser = User.objects.get(username=user.username)
+            authUser.delete()
             user = None
             msg_user_deleted = 'Uspesno obrisan korisnik'
     else:
         user = None
         msgnf = None
     return render(request, 'admin-remove-user.html', {'user': user, 'msgnf': msgnf, 'msg_user_deleted': msg_user_deleted})
+
+def logout_user(request):
+    logout(request)
+    return redirect('homepage')
