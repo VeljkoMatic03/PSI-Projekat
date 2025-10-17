@@ -132,3 +132,9 @@ def public_profile(request):
                                                    'avgRating': avgRating,
                                                    'countRating': countRating,
                                                    'notices': listOfNotices})
+def home(request, tip):
+    if tip == 'Student':
+        return redirect('dashboard-student')
+    if tip == 'Tutor':
+        return redirect('dashboard-tutor')
+    return redirect('homepage')
