@@ -7,20 +7,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Student Tabla</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="{% static "style.css" %}">
 </head>
 <body>
     <header class="main-header">
         <div class="container">
-            <a href="dashboard-student.html" class="logo">StudyBuddy</a>
-            <nav><a href="index.html">Odjavi se</a></nav>
+            <a href="{% url 'dashboard_student' %}" class="logo">StudyBuddy</a>
+            <nav>
+                <a href="{% url 'profile' %}">Moj profil</a>
+                <a href="{% url 'logout' %}">Odjavi se</a>
+            </nav>
         </div>
     </header>
     <main class="container">
         <h1>Studentska Tabla</h1>
         <h3>Akcije:</h3>
         <ul>
-            <li><a href="create-ad.html">Kreiraj novi oglas</a></li>
+            <li><a href="{% url 'create_ad' %}">Kreiraj novi oglas</a></li>
             <li><a href="search-ads.html">Pretraži oglase</a></li>
         </ul>
     </main>
