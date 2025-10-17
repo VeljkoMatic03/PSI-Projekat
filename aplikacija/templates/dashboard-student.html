@@ -12,7 +12,7 @@
 <body>
     <header class="main-header">
         <div class="container">
-            <a href="{% url 'dashboard_student' %}" class="logo">StudyBuddy</a>
+            <a href="{% url 'dashboard-student' %}" class="logo">StudyBuddy</a>
             <nav>
                 <a href="{% url 'profile' %}">Moj profil</a>
                 <a href="{% url 'logout' %}">Odjavi se</a>
@@ -24,7 +24,7 @@
         <h3>Akcije:</h3>
         <ul>
             <li><a href="{% url 'create_ad' %}">Kreiraj novi oglas</a></li>
-            <li><a href="search-ads.html">Pretraži oglase</a></li>
+            <li><a href="{% url 'search_ads' %}">Pretraži oglase</a></li>
         </ul>
     </main>
 </body>
