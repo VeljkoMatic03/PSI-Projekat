@@ -13,7 +13,7 @@
     <header class="main-header">
         <div class="container">
             <a href="index.html" class="logo">StudyBuddy</a>
-            <nav><a href="dashboard-student.html">Nazad na tablu</a></nav>
+            <nav><a href="{% url 'dashboard-student' %}">Nazad na tablu</a></nav>
         </div>
     </header>
     <main class="container">
@@ -24,16 +24,14 @@
         </form>
         <hr>
         <div class="item-list">
+            {% for oglas in oglasi %}
             <div class="item">
-                <h3><a href="view-ad.html">Potrebna pomoć za PSI projekat</a></h3>
-                <p>Postavio: Marko Marković (Ocena: 4.5)</p>
-                <p>Tip pomoci: Pomoc pri izradi projekta</p>
+                <h3><a href="{% url 'view_ad' oglas.idnotice %}">Naziv to be added</a></h3>
+                <p>Postavio: {{ oglas.idpublisher.name }} {{ oglas.idpublisher.surname }}</p>
+                <p>Tip pomoci: {{ oglas.type }}</p>
             </div>
-            <div class="item">
-                <h3><a href="view-ad.html">Tražim pomoć oko Matematike 2</a></h3>
-                <p>Postavio: Jelena Jelić (Ocena: 4.9)</p>
-                <p>Tip pomoci: Pomoc pri ucenju</p>
-            </div>
+            <hr>
+            {% endfor %}
         </div>
     </main>
 

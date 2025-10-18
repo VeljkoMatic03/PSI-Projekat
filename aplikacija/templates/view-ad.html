@@ -12,17 +12,18 @@
 <body>
     <header class="main-header">
         <div class="container">
-            <a href="index.html" class="logo">StudyBuddy</a>
-            <nav><a href="search-ads.html">Nazad na pretragu</a></nav>
+            <a href="#" class="logo">StudyBuddy</a>
+            <nav><a href="{% url 'search_ads' %}">Nazad na pretragu</a></nav>
         </div>
     </header>
     <main class="container">
-        <h1>Potrebna pomoć za PSI projekat</h1>
-        <p><b>Postavio:</b> <a href="public-profile.html">Marko Marković</a></p>
+        <h1>Naziv oglasa to be added</h1>
+        <p><b>Postavio:</b> {{ studentIme }} {{ studentPrezime }}</p>
         <hr>
         <h3>Opis</h3>
-        <p>Potrebna mi je pomoć oko implementacije dela aplikacije u Djangu.</p>
+        <p>{{ oglas.description }}</p>
         <hr>
+        {% if request.user.id == idVlasnika %}
         <h3>Prijavljeni tutori (Vidi samo vlasnik oglasa)</h3>
         <div class="item-list">
             <div class="item" style="display: flex; justify-content: space-between; align-items: center;">
@@ -43,8 +44,11 @@
             </div>
         </div>
         <hr>
+        {% endif %}
+        {% if jeTutor is not None %}
         <h3>Pošalji zahtev za saradnju (Vidi samo tutor)</h3>
         <button class="btn">Pošalji zahtev</button>
+        {% endif %}
     </main>
 </body>
 </html>
