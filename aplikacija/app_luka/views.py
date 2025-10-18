@@ -34,7 +34,7 @@ def view_ad(request,id):
     if len(Tutor.objects.filter(iduser_id=request.user.id))>0:
         jeTutor="DA"
     zahteviNeprihvaceni=Request.objects.filter(idnotice=id, isaccepted='P')
-    aktivneKolaboracije=Collaboration.objects.filter(idnotice=id)
+    aktivneKolaboracije=Collaboration.objects.filter(idnotice=id,dateend__isnull=True)
 
     tutoriNeprihvaceni=[]
     tutoriPrihvaceni=[]
@@ -43,7 +43,7 @@ def view_ad(request,id):
         tutoriNeprihvaceni.append(zahtev.idtutor)
 
     for zahtev in aktivneKolaboracije:
-     tutoriPrihvaceni.append(zahtev.idtutor)
+        tutoriPrihvaceni.append(zahtev.idtutor)
 
     return render(request,'view-ad.html',{'oglas':oglas,'studentIme':student.name, 'studentPrezime':student.surname, 'idVlasnika':student.iduser.iduser, 'jeTutor':jeTutor, 'tutoriPrihvaceni':tutoriPrihvaceni,'tutoriNeprihvaceni':tutoriNeprihvaceni})
 def prekini_saradnju(request,id):
