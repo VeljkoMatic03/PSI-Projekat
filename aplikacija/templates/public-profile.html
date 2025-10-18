@@ -67,7 +67,14 @@
             <button class="btn">Ostani bez komentara</button>
             <hr>
             <h3>Komentari drugih</h3>
-            <div class="item"><b>Marko M:</b> Odlična pomoć!</div>
+            <div class="item-list">
+                {% for comment in comments %}
+                    <div class="item">
+                        <p class="opis">{{ comment.comment }}</p>
+                        <p>Postavio: <a href="{% url 'profile' %}?username={{ comment.idratinguser.username }}">{{ comment.idratinguser.username }}</a></p>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </main>
 </body>
