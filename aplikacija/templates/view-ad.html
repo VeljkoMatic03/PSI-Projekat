@@ -26,22 +26,46 @@
         {% if request.user.id == idVlasnika %}
         <h3>Prijavljeni tutori (Vidi samo vlasnik oglasa)</h3>
         <div class="item-list">
-            <div class="item" style="display: flex; justify-content: space-between; align-items: center;">
-                <span><a href="public-profile.html">Ana Anić</a></span> 
-                <button class="btn" style="width: auto; background-color: #A6D785;">Prihvati</button>
-            </div>
-            <div class="item" style="display: flex; justify-content: space-between; align-items: center;">
-                <span><a href="public-profile.html">Nikola Nikolić</a></span> 
-                <button class="btn" style="width: auto; background-color: #A6D785;">Prihvati</button>
-            </div>
+            {% for tutor in tutoriNeprihvaceni %}
+                <div class="item" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span><a href="#">{{ tutor.name }} {{ tutor.surname }}</a></span>
+
+                    <div style="display: flex; gap: 8px;">
+                        <form method="post" action="{% url 'prihvati_zahtev' oglas.idnotice %}" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="tutor_id" value="{{ tutor.iduser_id }}">
+                            <button type="submit" class="btn" style="width:auto; background-color:#A6D785;">
+                                Prihvati
+                            </button>
+                        </form>
+
+                        <form method="post" action="{% url 'odbij_zahtev' oglas.idnotice %}" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="tutor_id" value="{{ tutor.iduser_id }}">
+                            <button type="submit" class="btn" style="width:auto; background-color:#FF7F7F;">
+                                Odbij
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
         <br>
         <h3>Aktivne saradnje (Vidi samo vlasnik oglasa)</h3>
         <div class="item-list">
-             <div class="item" style="display: flex; justify-content: space-between; align-items: center;">
-                <span><a href="public-profile.html">Petar Petrović</a></span> 
-                <button class="btn" style="width: auto; background-color: #FF7F7F;">Prekini saradnju</button>
-            </div>
+            {% for tutor in tutoriPrihvaceni %}
+                <div class="item" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span><a href="#">{{ tutor.name }} {{ tutor.surname }}</a></span>
+
+                    <form method="post" action="{% url 'prekini_saradnju' oglas.idnotice %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="tutor_id" value="{{ tutor.iduser_id }}">
+                        <button type="submit" class="btn" style="width: auto; background-color: #FF7F7F;">
+                            Prekini saradnju
+                        </button>
+                    </form>
+                </div>
+            {% endfor %}
         </div>
         <hr>
         {% endif %}
