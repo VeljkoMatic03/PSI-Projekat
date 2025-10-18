@@ -23,11 +23,11 @@
             <form method="post">
                 {% csrf_token %}
                 <div class="item" style="display: flex; justify-content: space-between; align-items: center;">
-                    <span><a href="public-profile.html">{{ tutor.iduser.username }}</a> {{ tutor.name }} {{ tutor.surname }}</span>
+                    <span><a href="{% url 'profile' %}?username={{ tutor.iduser.username }}">{{ tutor.iduser.username }}</a> {{ tutor.name }} {{ tutor.surname }}</span>
                     <div>
                         <input type="hidden" name="tutor_id" value="{{ tutor.iduser.iduser }}">
-                        <button type="submit" name="action" value="verify" style="width: auto; background-color: #A6D785;">Verifikuj</button>
-                        <button type="submit" name="action" value="reject" style="width: auto; background-color: #FF7F7F;">Odbij</button>
+                        <button type="submit" name="action" value="verify" class="btn-accept">Verifikuj</button>
+                        <button type="submit" name="action" value="reject" class="btn-reject">Odbij</button>
                     </div>
                 </div>
             </form>

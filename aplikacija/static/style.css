@@ -79,6 +79,26 @@ textarea {
     text-decoration: none;
 }
 
+.btn-reject {
+    background-color: #d78080;
+    color: #9a0808;
+    padding: 10px 15px;
+    border: 1px solid #999;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-accept {
+    background-color: #5df69f;
+    color: #2f7e51;
+    padding: 10px 15px;
+    border: 1px solid #999;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
 .item-list {
     border: 1px solid #ccc;
     height: 300px;
@@ -157,4 +177,11 @@ textarea {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+.opis {
+    border: 1px solid #b4b4b4;
+    height: 50px;
+    overflow-y: scroll;
+    padding: 10px;
 }

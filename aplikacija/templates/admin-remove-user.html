@@ -34,7 +34,7 @@
             {% csrf_token %}
             <input type="hidden" name="user_id" value="{{ user.iduser }}">
             <h3>{{ user.username }}</h3>
-            <button type="submit" class="btn" name="remove">Ukloni</button>
+            <button type="submit" class="btn-reject" name="remove">Ukloni</button>
         </form>
         </div>
         {% endif %}

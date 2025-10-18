@@ -124,14 +124,19 @@ def public_profile(request):
         else:
             for notice in listOfNoticesQ:
                 listOfNotices.append(notice)
-
+    myType = None;
+    if Student.objects.filter(iduser__username=request.user.username).exists():
+        myType = 'Student'
+    elif Tutor.objects.filter(iduser__username=request.user.username).exists():
+        myType = 'Tutor'
     return render(request, 'public-profile.html', {'user': user,
                                                    'type': type,
                                                    'myProfile': myProfile,
                                                    'isRated': isRated,
                                                    'avgRating': avgRating,
                                                    'countRating': countRating,
-                                                   'notices': listOfNotices})
+                                                   'notices': listOfNotices,
+                                                   'myType': myType})
 def home(request, tip):
     if tip == 'Student':
         return redirect('dashboard-student')
