@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from app_veljko.views import adminpanel, verifyTutor, removeUser, logout_user, public_profile, home
 from app_filip.views import homepage, register_user, login_user
-from app_luka.views import create_ad, dashboard_student, search_ads, view_ad, prekini_saradnju, prihvati_zahtev, odbij_zahtev
+from app_luka.views import create_ad, dashboard_student, search_ads, view_ad, prekini_saradnju, prihvati_zahtev, odbij_zahtev, posalji_zahtev
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('admin_panel/', adminpanel, name='adminpanel'),
@@ -37,5 +37,5 @@ urlpatterns = [
     path('prekini_saradnju/<int:id>', prekini_saradnju, name='prekini_saradnju'),
     path('prihvati_zahtev/<int:id>', prihvati_zahtev, name='prihvati_zahtev'),
     path('odbij_zahtev/<int:id>', odbij_zahtev, name='odbij_zahtev'),
-
+    path('posalji_zahtev/<int:id>', posalji_zahtev, name='posalji_zahtev'),
 ]

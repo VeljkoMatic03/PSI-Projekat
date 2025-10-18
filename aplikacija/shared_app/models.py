@@ -85,11 +85,13 @@ class Cv(models.Model):
 
 class Notice(models.Model):
     idnotice = models.AutoField(db_column='idNotice', primary_key=True)  # Field name made lowercase.
-    idpublisher = models.ForeignKey(Student, models.CASCADE, db_column='idPublisher')  # Field name made lowercase.
+    idpublisher = models.ForeignKey('Student', models.DO_NOTHING, db_column='idPublisher')  # Field name made lowercase.
+    title = models.CharField(max_length=45)
+    subject = models.CharField(max_length=45)
     type = models.CharField(max_length=45)
     description = models.TextField(blank=True, null=True)
-    attachment = models.BinaryField(blank=True, null=True)
-    idtutor = models.ForeignKey(Tutor, models.CASCADE, db_column='idTutor', blank=True, null=True)  # Field name made lowercase.
+    attachment = models.TextField(blank=True, null=True)
+    idtutor = models.ForeignKey('Tutor', models.DO_NOTHING, db_column='idTutor', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False

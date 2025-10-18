@@ -17,14 +17,16 @@
         </div>
     </header>
     <main class="container">
-        <h1>Naziv oglasa to be added</h1>
+        <h1>{{ oglas.title }}</h1>
+        <h3>Predmet: {{ oglas.subject }}</h3>
+        <p><b>Tip pomoci: </b> {{ oglas.type }}</p>
         <p><b>Postavio:</b> {{ studentIme }} {{ studentPrezime }}</p>
         <hr>
         <h3>Opis</h3>
         <p>{{ oglas.description }}</p>
         <hr>
         {% if request.user.id == idVlasnika %}
-        <h3>Prijavljeni tutori (Vidi samo vlasnik oglasa)</h3>
+        <h3>Prijavljeni tutori</h3>
         <div class="item-list">
             {% for tutor in tutoriNeprihvaceni %}
                 <div class="item" style="display: flex; justify-content: space-between; align-items: center;">
@@ -34,9 +36,11 @@
                         <form method="post" action="{% url 'prihvati_zahtev' oglas.idnotice %}" style="display:inline;">
                             {% csrf_token %}
                             <input type="hidden" name="tutor_id" value="{{ tutor.iduser_id }}">
+                            {% if oglas.idtutor is None %}
                             <button type="submit" class="btn" style="width:auto; background-color:#A6D785;">
                                 Prihvati
                             </button>
+                            {% endif %}
                         </form>
 
                         <form method="post" action="{% url 'odbij_zahtev' oglas.idnotice %}" style="display:inline;">
@@ -51,7 +55,7 @@
             {% endfor %}
         </div>
         <br>
-        <h3>Aktivne saradnje (Vidi samo vlasnik oglasa)</h3>
+        <h3>Aktivna saradnja</h3>
         <div class="item-list">
             {% for tutor in tutoriPrihvaceni %}
                 <div class="item" style="display: flex; justify-content: space-between; align-items: center;">
@@ -69,9 +73,15 @@
         </div>
         <hr>
         {% endif %}
-        {% if jeTutor is not None %}
-        <h3>Pošalji zahtev za saradnju (Vidi samo tutor)</h3>
-        <button class="btn">Pošalji zahtev</button>
+        {% if jeTutor %}
+            <h3>Pošalji zahtev za saradnju</h3>
+            <form method="post" action="{% url 'posalji_zahtev' oglas.idnotice %}">
+                {% csrf_token %}
+                <input type="hidden" name="tutor_username" value="{{ request.user.username }}">
+                <button type="submit" class="btn" style="width:auto; background-color:#A6D785;">
+                    Pošalji zahtev
+                </button>
+            </form>
         {% endif %}
     </main>
 </body>

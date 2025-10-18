@@ -2,7 +2,7 @@ from datetime import date
 
 from django.shortcuts import render, redirect
 
-from shared_app.models import Notice, Student, Tutor, Request, Collaboration
+from shared_app.models import Notice, Student, Tutor, Request, Collaboration, Tag, MyUser
 
 
 # Create your views here.
@@ -13,12 +13,16 @@ def create_ad(request):
         tip_pomoci=request.POST.get('tip_pomoci')
         opis=request.POST.get('opis')
         tagovi=request.POST.get('tagovi')
-        #Notice.objects.create(type=tip_pomoci, description=opis, idpublisher=request.user.id)
-        print(naziv_oglasa)
-        print(predmet)
-        print(tip_pomoci)
-        print(opis)
-        print(tagovi)
+        student=Student.objects.get(pk=request.user.id)
+        Notice.objects.create(type=tip_pomoci, description=opis, idpublisher=student, title=naziv_oglasa, subject=predmet)
+        tags=tagovi.split(',')
+        for tag in tags:
+            if (len(tag)==0):
+                continue
+            postoji=Tag.objects.filter(value=tag)
+            if (len(postoji)==0):
+                Tag.objects.create(value=tag)
+        return redirect('dashboard-student')
     return render(request,'create-ad.html')
 def dashboard_student(request):
     return render(request,'dashboard-student.html')
@@ -31,8 +35,10 @@ def view_ad(request,id):
     oglas=Notice.objects.get(pk=id)
     student=Student.objects.get(pk=oglas.idpublisher.iduser)
     jeTutor=None
-    if len(Tutor.objects.filter(iduser_id=request.user.id))>0:
+    korisnik=MyUser.objects.filter(username=request.user.username)[0]
+    if len(Tutor.objects.filter(iduser=korisnik.iduser))>0:
         jeTutor="DA"
+
     zahteviNeprihvaceni=Request.objects.filter(idnotice=id, isaccepted='P')
     aktivneKolaboracije=Collaboration.objects.filter(idnotice=id,dateend__isnull=True)
 
@@ -56,6 +62,9 @@ def prekini_saradnju(request,id):
         collab.dateend = date.today()
         Collaboration.save(collab)
 
+        oglas=Notice.objects.get(pk=id)
+        oglas.idtutor=None
+        Notice.save(oglas)
         #Request.objects.filter(idnotice_id=id,idtutor_id=tutor_id,isaccepted='A').update(isaccepted='R')
         #Mozemo da stavimo da bude rejected u requests ali mi to nema smisla pa cu ostaviti u komentaru
 
@@ -65,12 +74,14 @@ def prihvati_zahtev(request, id):
     if request.method == "POST":
         tutor_id = request.POST.get("tutor_id")
         print(f"Prihvati zahtev tutor_id={tutor_id}, oglas_id={id}")
-
+        tutor=Tutor.objects.filter(iduser_id=tutor_id)[0]
         zahtev = Request.objects.filter(idtutor_id=tutor_id,idnotice_id=id,isaccepted='P')[0]
         zahtev.isaccepted = 'A'
         zahtev.save()
 
         oglas = zahtev.idnotice
+        oglas.idtutor=tutor
+        Notice.save(oglas)
         student = oglas.idpublisher
         tutor = zahtev.idtutor
 
@@ -87,3 +98,15 @@ def odbij_zahtev(request,id):
         zahtev.isaccepted = 'R'
         zahtev.save()
     return redirect('view_ad',id=id)
+
+def posalji_zahtev(request, id):
+    if request.method == "POST":
+        tutor_username = request.POST.get("tutor_username")
+
+        korisnik = MyUser.objects.filter(username=tutor_username)[0]
+        tutor=Tutor.objects.get(iduser=korisnik.iduser)
+
+        notice = Notice.objects.get(idnotice=id)
+        Request.objects.create(idnotice=notice,idtutor=tutor,isaccepted='P')
+
+    return redirect('search_ads')

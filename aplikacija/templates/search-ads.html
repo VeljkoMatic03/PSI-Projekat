@@ -12,7 +12,7 @@
 <body>
     <header class="main-header">
         <div class="container">
-            <a href="index.html" class="logo">StudyBuddy</a>
+            <a href="#" class="logo">StudyBuddy</a>
             <nav><a href="{% url 'dashboard-student' %}">Nazad na tablu</a></nav>
         </div>
     </header>
@@ -26,7 +26,8 @@
         <div class="item-list">
             {% for oglas in oglasi %}
             <div class="item">
-                <h3><a href="{% url 'view_ad' oglas.idnotice %}">Naziv to be added</a></h3>
+                <h3><a href="{% url 'view_ad' oglas.idnotice %}">{{ oglas.title }}</a></h3>
+                <h5>Predmet:  {{ oglas.subject }}</h5>
                 <p>Postavio: {{ oglas.idpublisher.name }} {{ oglas.idpublisher.surname }}</p>
                 <p>Tip pomoci: {{ oglas.type }}</p>
             </div>
