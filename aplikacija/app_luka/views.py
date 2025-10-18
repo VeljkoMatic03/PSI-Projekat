@@ -2,7 +2,7 @@ from datetime import date
 
 from django.shortcuts import render, redirect
 
-from shared_app.models import Notice, Student, Tutor, Request, Collaboration, Tag, MyUser
+from shared_app.models import Notice, Student, Tutor, Request, Collaboration, Tag, MyUser, Applied
 
 
 # Create your views here.
@@ -14,7 +14,7 @@ def create_ad(request):
         opis=request.POST.get('opis')
         tagovi=request.POST.get('tagovi')
         student=Student.objects.get(pk=request.user.id)
-        Notice.objects.create(type=tip_pomoci, description=opis, idpublisher=student, title=naziv_oglasa, subject=predmet)
+        myNotice=Notice.objects.create(type=tip_pomoci, description=opis, idpublisher=student, title=naziv_oglasa, subject=predmet)
         tags=tagovi.split(',')
         for tag in tags:
             if (len(tag)==0):
@@ -22,6 +22,9 @@ def create_ad(request):
             postoji=Tag.objects.filter(value=tag)
             if (len(postoji)==0):
                 Tag.objects.create(value=tag)
+            myTag=Tag.objects.filter(value=tag)[0]
+            Applied.objects.create(idtag=myTag,idnotice=myNotice)
+
         return redirect('dashboard-student')
     return render(request,'create-ad.html')
 def dashboard_student(request):
