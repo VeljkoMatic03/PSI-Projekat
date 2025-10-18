@@ -35,9 +35,16 @@ def view_ad(request,id):
     oglas=Notice.objects.get(pk=id)
     student=Student.objects.get(pk=oglas.idpublisher.iduser)
     jeTutor=None
+    poslaoZahtev=None
     korisnik=MyUser.objects.filter(username=request.user.username)[0]
+
+    tutor=Tutor.objects.filter(iduser=korisnik.iduser)[0]
+
     if len(Tutor.objects.filter(iduser=korisnik.iduser))>0:
         jeTutor="DA"
+
+    if len(Request.objects.filter(idnotice=id,isaccepted='P',idtutor=tutor))>0:
+        poslaoZahtev="DA"
 
     zahteviNeprihvaceni=Request.objects.filter(idnotice=id, isaccepted='P')
     aktivneKolaboracije=Collaboration.objects.filter(idnotice=id,dateend__isnull=True)
@@ -51,7 +58,7 @@ def view_ad(request,id):
     for zahtev in aktivneKolaboracije:
         tutoriPrihvaceni.append(zahtev.idtutor)
 
-    return render(request,'view-ad.html',{'oglas':oglas,'studentIme':student.name, 'studentPrezime':student.surname, 'idVlasnika':student.iduser.iduser, 'jeTutor':jeTutor, 'tutoriPrihvaceni':tutoriPrihvaceni,'tutoriNeprihvaceni':tutoriNeprihvaceni})
+    return render(request,'view-ad.html',{'oglas':oglas,'studentIme':student.name, 'studentPrezime':student.surname, 'idVlasnika':student.iduser.iduser, 'jeTutor':jeTutor, 'tutoriPrihvaceni':tutoriPrihvaceni,'tutoriNeprihvaceni':tutoriNeprihvaceni, 'poslaoZahtev' : poslaoZahtev})
 def prekini_saradnju(request,id):
     if request.method == "POST":
         tutor_id = request.POST.get("tutor_id")

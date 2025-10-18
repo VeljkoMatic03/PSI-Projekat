@@ -73,7 +73,7 @@
         </div>
         <hr>
         {% endif %}
-        {% if jeTutor %}
+        {% if jeTutor and not poslaoZahtev %}
             <h3>Pošalji zahtev za saradnju</h3>
             <form method="post" action="{% url 'posalji_zahtev' oglas.idnotice %}">
                 {% csrf_token %}
