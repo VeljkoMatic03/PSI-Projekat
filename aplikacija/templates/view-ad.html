@@ -12,7 +12,7 @@
 <body>
     <header class="main-header">
         <div class="container">
-            <a href="#" class="logo">StudyBuddy</a>
+            <a href="{% url 'home' tip=myType %}" class="logo">StudyBuddy</a>
             <nav><a href="{% url 'search_ads' %}">Nazad na pretragu</a></nav>
         </div>
     </header>
@@ -25,7 +25,21 @@
         <h3>Opis</h3>
         <p>{{ oglas.description }}</p>
         <hr>
-        {% if request.user.id == idVlasnika %}
+
+        {% if gotovaSaradnja %}
+            {% if request.user.id == idVlasnika or jaPomogao %}
+                <div style="display: flex; justify-content: center; margin-top: 20px;">
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn" style="width:auto; background-color:#A6D785;">
+                            Oceni
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+        {% endif %}
+
+        {% if request.user.id == idVlasnika and gotovaSaradnja is None %}
         <h3>Prijavljeni tutori</h3>
         <div class="item-list">
             {% for tutor in tutoriNeprihvaceni %}
@@ -73,7 +87,7 @@
         </div>
         <hr>
         {% endif %}
-        {% if jeTutor and not poslaoZahtev %}
+        {% if jeTutor and not poslaoZahtev and not gotovaSaradnja%}
             <h3>Pošalji zahtev za saradnju</h3>
             <form method="post" action="{% url 'posalji_zahtev' oglas.idnotice %}">
                 {% csrf_token %}

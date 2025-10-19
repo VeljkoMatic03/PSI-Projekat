@@ -2,7 +2,7 @@ from datetime import date
 
 from django.shortcuts import render, redirect
 
-from shared_app.models import Notice, Student, Tutor, Request, Collaboration, Tag, MyUser, Applied
+from shared_app.models import Notice, Student, Tutor, Request, Collaboration, Tag, MyUser, Applied, Admin
 
 
 # Create your views here.
@@ -32,7 +32,24 @@ def dashboard_student(request):
 
 def search_ads(request):
     oglasi=Notice.objects.all()
-    return render(request,'search-ads.html',{'oglasi':oglasi})
+    finalOglasi=[]
+    for oglas in oglasi:
+        if len(Collaboration.objects.filter(idnotice=oglas))==0:
+            finalOglasi.append(oglas)
+            continue
+        kolaboracija=Collaboration.objects.filter(idnotice=oglas)[0]
+        if kolaboracija.dateend==None:
+            finalOglasi.append(oglas)
+
+    myType=None
+
+    if Student.objects.filter(iduser__username=request.user.username).exists():
+        myType = 'Student'
+    elif Tutor.objects.filter(iduser__username=request.user.username).exists():
+        myType = 'Tutor'
+    elif Admin.objects.filter(iduser__username=request.user.username).exists():
+        myType = 'Admin'
+    return render(request,'search-ads.html',{'myType':myType,'oglasi':finalOglasi})
 
 def view_ad(request,id):
     oglas=Notice.objects.get(pk=id)
@@ -41,13 +58,32 @@ def view_ad(request,id):
     poslaoZahtev=None
     korisnik=MyUser.objects.filter(username=request.user.username)[0]
 
-    tutor=Tutor.objects.filter(iduser=korisnik.iduser)[0]
+    tutor=None
+    gotovaSaradnja=None
+
+    saradnja=Collaboration.objects.filter(idnotice=id)
+
+    if len(saradnja)>0 and saradnja[0].dateend!=None:
+        gotovaSaradnja="DA"
+
+    jaPomogao=None
 
     if len(Tutor.objects.filter(iduser=korisnik.iduser))>0:
         jeTutor="DA"
+        tutor = Tutor.objects.filter(iduser=korisnik.iduser)[0]
+        if len(Collaboration.objects.filter(idnotice=id,idtutor=tutor))>0:
+            jaPomogao="DA"
 
     if len(Request.objects.filter(idnotice=id,isaccepted='P',idtutor=tutor))>0:
         poslaoZahtev="DA"
+
+    myType=None
+    if Student.objects.filter(iduser__username=request.user.username).exists():
+        myType = 'Student'
+    elif Tutor.objects.filter(iduser__username=request.user.username).exists():
+        myType = 'Tutor'
+    elif Admin.objects.filter(iduser__username=request.user.username).exists():
+        myType = 'Admin'
 
     zahteviNeprihvaceni=Request.objects.filter(idnotice=id, isaccepted='P')
     aktivneKolaboracije=Collaboration.objects.filter(idnotice=id,dateend__isnull=True)
@@ -61,7 +97,7 @@ def view_ad(request,id):
     for zahtev in aktivneKolaboracije:
         tutoriPrihvaceni.append(zahtev.idtutor)
 
-    return render(request,'view-ad.html',{'oglas':oglas,'studentIme':student.name, 'studentPrezime':student.surname, 'idVlasnika':student.iduser.iduser, 'jeTutor':jeTutor, 'tutoriPrihvaceni':tutoriPrihvaceni,'tutoriNeprihvaceni':tutoriNeprihvaceni, 'poslaoZahtev' : poslaoZahtev})
+    return render(request,'view-ad.html',{'myType':myType,'oglas':oglas,'studentIme':student.name, 'studentPrezime':student.surname, 'idVlasnika':student.iduser.iduser, 'jeTutor':jeTutor, 'tutoriPrihvaceni':tutoriPrihvaceni,'tutoriNeprihvaceni':tutoriNeprihvaceni, 'poslaoZahtev' : poslaoZahtev, 'gotovaSaradnja':gotovaSaradnja, 'jaPomogao':jaPomogao})
 def prekini_saradnju(request,id):
     if request.method == "POST":
         tutor_id = request.POST.get("tutor_id")
@@ -73,7 +109,6 @@ def prekini_saradnju(request,id):
         Collaboration.save(collab)
 
         oglas=Notice.objects.get(pk=id)
-        oglas.idtutor=None
         Notice.save(oglas)
         #Request.objects.filter(idnotice_id=id,idtutor_id=tutor_id,isaccepted='A').update(isaccepted='R')
         #Mozemo da stavimo da bude rejected u requests ali mi to nema smisla pa cu ostaviti u komentaru
