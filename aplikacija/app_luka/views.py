@@ -1,8 +1,9 @@
 from datetime import date
 
+from django.db.models import Avg
 from django.shortcuts import render, redirect
 
-from shared_app.models import Notice, Student, Tutor, Request, Collaboration, Tag, MyUser, Applied, Admin
+from shared_app.models import Notice, Student, Tutor, Request, Collaboration, Tag, MyUser, Applied, Admin, Rating
 
 
 # Create your views here.
@@ -40,7 +41,6 @@ def search_ads(request):
         kolaboracija=Collaboration.objects.filter(idnotice=oglas)[0]
         if kolaboracija.dateend==None:
             finalOglasi.append(oglas)
-
     myType=None
 
     if Student.objects.filter(iduser__username=request.user.username).exists():
@@ -49,7 +49,47 @@ def search_ads(request):
         myType = 'Tutor'
     elif Admin.objects.filter(iduser__username=request.user.username).exists():
         myType = 'Admin'
-    return render(request,'search-ads.html',{'myType':myType,'oglasi':finalOglasi})
+
+    if request.method!="POST": return render(request,'search-ads.html',{'myType':myType,'oglasi':finalOglasi})
+
+    nazivOglasa = request.POST.get("search", "").strip()
+    tipOglasa = request.POST.getlist("tip")
+
+    tags_input = request.POST.get("tag", "").strip()
+    tags=[t.strip() for t in tags_input.split(",") if t.strip()]
+
+    minRating = request.POST.get("min_rating", None)
+
+    print(nazivOglasa)
+    print(tags)
+    print(tipOglasa)
+    print(minRating)
+
+
+    filteredOglasi = finalOglasi
+    if len(nazivOglasa)>0:
+        filteredOglasi = [o for o in filteredOglasi if nazivOglasa.lower() in (o.title or "").lower()]
+    if len(tipOglasa)>0:
+        filteredOglasi = [o for o in filteredOglasi if o.type in tipOglasa]
+    if len(tags)>0:
+        filteredOglasi = [
+            o for o in filteredOglasi
+            if o.applied_set.filter(idtag__value__in=tags).exists()
+        ]
+    if len(minRating)>0:
+        minRating = float(minRating)
+        filteredOglasi = [
+            o for o in filteredOglasi
+            if (
+                    Rating.objects.filter(idrateduser=o.idpublisher.iduser).aggregate(avg=Avg("value"))["avg"] is None
+                    or
+                    Rating.objects.filter(idrateduser=o.idpublisher.iduser).aggregate(avg=Avg("value"))["avg"] >= minRating
+            )
+        ]
+
+    print(filteredOglasi)
+
+    return render(request,'search-ads.html',{'myType':myType,'oglasi':filteredOglasi})
 
 def view_ad(request,id):
     oglas=Notice.objects.get(pk=id)

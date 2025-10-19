@@ -79,6 +79,10 @@ textarea {
     text-decoration: none;
 }
 
+.btn:hover {
+    background-color: #d0d0d0;
+}
+
 .btn-reject {
     background-color: #d78080;
     color: #9a0808;
@@ -99,18 +103,53 @@ textarea {
     text-decoration: none;
 }
 
+.filter-form {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    padding: 15px 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.filter-form div {
+    margin-bottom: 15px;
+}
+
+.filter-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.filter-form input[type="checkbox"] {
+    margin-right: 5px;
+}
+
 .item-list {
     border: 1px solid #ccc;
     height: 300px;
     overflow-y: scroll;
     padding: 10px;
+    margin-top: 15px;
 }
+
 .item {
-    padding: 10px;
+    padding: 12px 10px;
     border-bottom: 1px solid #ccc;
 }
+
 .item:last-child {
     border-bottom: none;
+}
+
+.item h3 a {
+    color: #0044cc;
+    text-decoration: none;
+}
+
+.item h3 a:hover {
+    text-decoration: underline;
 }
 
 .profile-sidebar {
@@ -129,7 +168,7 @@ textarea {
 
 .form-group-inline {
     display: flex;
-    align-items: center; 
+    align-items: center;
 }
 
 .radio-options {
@@ -137,16 +176,15 @@ textarea {
     text-align: center;
 }
 
-
 .radio-options label {
-    display: inline-block; 
+    display: inline-block;
     margin: 0 10px;
 }
 
 .modal {
-    display: none; 
-    position: fixed; 
-    z-index: 1; 
+    display: none;
+    position: fixed;
+    z-index: 1;
     left: 0;
     top: 0;
     width: 100%;
@@ -160,7 +198,7 @@ textarea {
     padding: 20px;
     border: 1px solid #888;
     width: 400px;
-    position: relative; 
+    position: relative;
 }
 
 .close-btn {
