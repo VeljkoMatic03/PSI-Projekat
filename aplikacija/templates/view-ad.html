@@ -29,7 +29,7 @@
         {% if gotovaSaradnja %}
             {% if request.user.username == usernameVlasnika or jaPomogao %}
                 <div style="display: flex; justify-content: center; margin-top: 20px;">
-                    <form method="post">
+                    <form method="get" action="{% url 'rate' oglas.idnotice %}">
                         {% csrf_token %}
                         <button type="submit" class="btn" style="width:auto; background-color:#A6D785;">
                             Oceni
