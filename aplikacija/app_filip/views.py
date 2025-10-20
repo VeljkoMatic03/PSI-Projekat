@@ -97,3 +97,6 @@ def login_user(request):
         admin.save()
         return redirect('adminpanel')
     return render(request, 'login.html', {'error': errorMsg})
+def reset_password(request):
+    errorMsg = None
+    return render(request, 'reset-password.html', {'error': errorMsg})
