@@ -130,7 +130,8 @@ def public_profile(request):
     comments = []
     for rating in Rating.objects.all():
         if rating.idrateduser.username == user.iduser.username:
-            comments.append(rating)
+            if rating.comment != '':
+                comments.append(rating)
     myType = None
     if Student.objects.filter(iduser__username=request.user.username).exists():
         myType = 'Student'
@@ -138,6 +139,8 @@ def public_profile(request):
         myType = 'Tutor'
     elif Admin.objects.filter(iduser__username=request.user.username).exists():
         myType = 'Admin'
+    listOfNotices.reverse()
+    comments.reverse()
     return render(request, 'public-profile.html', {'user': user,
                                                    'type': type,
                                                    'myProfile': myProfile,
