@@ -44,9 +44,6 @@ urlpatterns = [
     path('dashboard_tutor/', dashboard_tutor, name='dashboard-tutor'),
     path('create_cv/', create_cv, name='create_cv'),
     path('edit_cv/', edit_cv, name='edit_cv'),
-<<<<<<< Updated upstream
     path('reset_password/', reset_password, name='reset_password'),
-=======
     path('download_cv/', download_cv, name='download_cv'),
->>>>>>> Stashed changes
 ]
