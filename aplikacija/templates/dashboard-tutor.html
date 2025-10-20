@@ -7,13 +7,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Tutor Tabla</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="{% static "style.css" %}">
 </head>
 <body>
     <header class="main-header">
         <div class="container">
-            <a href="dashboard-tutor.html" class="logo">StudyBuddy</a>
-            <nav><a href="index.html">Odjavi se</a></nav>
+            <a href="{% url 'dashboard-tutor' %}" class="logo">StudyBuddy</a>
+            <nav>
+                <a href="{% url 'profile' %}">Moj profil</a>
+                <a href="{% url 'logout' %}">Odjavi se</a>
+            </nav>
         </div>
     </header>
     <main class="container">
