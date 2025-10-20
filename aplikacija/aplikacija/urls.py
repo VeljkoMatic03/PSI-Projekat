@@ -15,12 +15,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from app_veljko.views import adminpanel, verifyTutor, removeUser, logout_user, public_profile, home, rate
 from app_filip.views import homepage, register_user, login_user, reset_password
 from app_luka.views import create_ad, dashboard_student, search_ads, view_ad, prekini_saradnju, prihvati_zahtev, odbij_zahtev, posalji_zahtev
 from app_andjela.views import dashboard_tutor, create_cv, edit_cv, download_cv
-
+from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('admin_panel/', adminpanel, name='adminpanel'),
@@ -46,4 +46,8 @@ urlpatterns = [
     path('edit_cv/', edit_cv, name='edit_cv'),
     path('reset_password/', reset_password, name='reset_password'),
     path('download_cv/', download_cv, name='download_cv'),
+    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 ]

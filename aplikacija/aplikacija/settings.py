@@ -9,6 +9,17 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+import ssl
+_old_create_default_context = ssl.create_default_context
+
+def create_default_context_with_certifi(purpose=ssl.Purpose.SERVER_AUTH, *, cafile=None, capath=None, cadata=None):
+    if cafile is None and capath is None and cadata is None:
+        cafile = certifi.where() # Koristi putanju iz certifi paketa
+    return _old_create_default_context(purpose, cafile=cafile, capath=capath, cadata=cadata)
+
+ssl.create_default_context = create_default_context_with_certifi
+
+
 
 from pathlib import Path
 import os
@@ -101,7 +112,7 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
+"""AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
@@ -115,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+"""
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
@@ -138,3 +149,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+import certifi
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'studybuddy.etf@gmail.com'
+EMAIL_HOST_PASSWORD = 'iein hkne ekxo mflg'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+AUTH_PASSWORD_VALIDATORS = []
