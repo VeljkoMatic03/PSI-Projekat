@@ -12,20 +12,52 @@
 <body>
     <header class="main-header">
         <div class="container">
-            <a href="index.html" class="logo">StudyBuddy</a>
-            <nav><a href="dashboard-tutor.html">Nazad na tablu</a></nav>
+            <a href={% url 'dashboard-tutor' %} class="logo">StudyBuddy</a>
+            <nav><a href={% url 'dashboard-tutor' %}>Nazad na tablu</a></nav>
         </div>
     </header>
     <main class="container">
         <h1>Uredi CV</h1>
-        <form action="dashboard-tutor.html">
-            <div class="form-group"><label>Ime</label><input type="text" required></div>
-            <div class="form-group"><label>Prezime</label><input type="text" required></div>
-            <div class="form-group"><label>Slika</label><input type="file" required></div>
-            <div class="form-group"><label>O meni</label><textarea rows="3" required></textarea></div>
-            <div class="form-group"><label>Edukacija</label><textarea rows="3" required></textarea></div>
-            <div class="form-group"><label>Projekti</label><textarea rows="3" required></textarea></div>
-            <div class="form-group"><label>Iskustvo</label><textarea rows="3" required></textarea></div>
+        <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+            <div class="form-group">
+                <label>Ime</label>
+                <input type="text" name="novoIme" required value="{{ name }}">
+            </div>
+            <div class="form-group">
+                <label>Prezime</label>
+                <input type="text" name="novoPrezime" required value="{{ surname }}">
+            </div>
+            <div class="form-group">
+                <label>Slika
+                    {% if slika != None %}
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="promeniSliku">Promeni
+                    {% endif %}
+                </label>
+                <div>
+                    {% if slika != None %}
+                        <img src="data:image/png;base64,{{ slika }}" alt="Slika" width="150">
+                    {% endif %}
+                </div>
+                <input type="file" name="novaSlika">
+            </div>
+            <div class="form-group">
+                <label>O meni</label>
+                <textarea rows="3" name="novoOMeni" >{{ aboutme }}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Edukacija</label>
+                <textarea rows="3" name="novaEdukacija" required>{{ education }}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Projekti</label>
+                <textarea rows="3" name="noviProjekti" >{{ projects }}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Iskustvo</label>
+                <textarea rows="3" name="novoIskustvo" >{{ experience }}</textarea>
+            </div>
             <button type="submit" class="btn">Sačuvaj</button>
         </form>
     </main>
