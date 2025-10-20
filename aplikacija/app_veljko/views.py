@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from shared_app.models import MyUser, Verification, Tutor, Admin, Student, Rating, Notice
+from shared_app.models import MyUser, Verification, Tutor, Admin, Student, Rating, Notice, Collaboration
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 
@@ -83,7 +83,10 @@ def public_profile(request):
             user = Tutor.objects.filter(iduser=user).first()
         elif Admin.objects.filter(iduser=user).exists():
             return render(request, 'index.html')
-        myProfile = False
+        if user.iduser.username == request.user.username:
+            myProfile = True
+        else:
+            myProfile = False
     else:
         user = request.user
         if Student.objects.filter(iduser__username=user.username).exists():
@@ -152,3 +155,61 @@ def home(request, tip):
     if tip == 'Admin':
         return redirect('adminpanel')
     return redirect('homepage')
+
+def rate(request, id):
+    user = MyUser.objects.get(username=request.user.username)
+    tip = None
+    if Student.objects.filter(iduser=user).exists():
+        tip = 'Student'
+    elif Tutor.objects.filter(iduser=user).exists():
+        tip = 'Tutor'
+    elif Admin.objects.filter(iduser=user).exists():
+        tip = 'Admin'
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+        rating = int(rating)
+        notice = Notice.objects.get(idnotice=id)
+        collaboration = Collaboration.objects.get(idnotice=notice)
+        otherUser = None
+        if collaboration.idstudent.iduser.username == request.user.username:
+            otherUser = collaboration.idtutor.iduser
+        else:
+            otherUser = collaboration.idstudent.iduser
+        newRating = Rating.objects.create(
+            value=rating,
+            comment=comment,
+            idratinguser=MyUser.objects.get(username=request.user.username),
+            idrateduser=otherUser,
+            idcollaboration=collaboration
+        )
+        return redirect('home', tip)
+
+    notice = Notice.objects.filter(idnotice=id)
+    if not notice.exists():
+        return redirect('home', tip)
+    msgNotFinished = False
+    tutor = None
+    if notice.first().idtutor != None:
+        tutor = notice.first().idtutor.iduser
+    student = notice.first().idpublisher.iduser
+    collaboration = Collaboration.objects.filter(idnotice=notice.first())
+    if not collaboration.exists():
+        msgNotFinished = True
+    else:
+        if collaboration.first().dateend == None:
+            msgNotFinished = True
+    msgNotAllowed = True
+    if request.user.username == student.username:
+        msgNotAllowed = False
+    if tutor != None and request.user.username == tutor.username:
+        msgNotAllowed = False
+    msgRated = False
+    ratings = Rating.objects.filter(idcollaboration=collaboration.first())
+    for rating in ratings:
+        if rating.idratinguser.username == request.user.username:
+            msgRated = True
+    return render(request, 'rate.html', {'notice': notice.first(), 'student': student,
+                                         'tutor': tutor, 'notFinished': msgNotFinished,
+                                         'myType': tip, 'notAllowed': msgNotAllowed,
+                                         'rated': msgRated})

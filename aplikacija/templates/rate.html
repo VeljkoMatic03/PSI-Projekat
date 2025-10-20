@@ -1,0 +1,107 @@
+<!--Veljko Matić-->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ocenjivanje</title>
+    <link rel="stylesheet" href="{% static "style.css" %}">
+
+    <style>
+        .star-rating-wrapper {
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .star-rating {
+            direction: rtl;
+            display: inline-flex;
+            font-size: 2em;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .star-rating input:checked ~ label {
+            color: gold;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: gold;
+        }
+
+        textarea {
+            font-family: inherit;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <a href="{% url 'home' tip=myType %}" class="logo">StudyBuddy</a>
+            <nav><a href="{% url 'search_ads' %}">Nazad na pretragu</a></nav>
+        </div>
+    </header>
+    <main class="container">
+        <h1>{{ notice.title }}</h1>
+        <h3>Predmet: {{ notice.subject }}</h3>
+        <p><b>Student:</b> {{ student.username }}</p>
+        {% if tutor == None %}
+            <p><b>Tutor:</b> Saradnja nije gotova</p>
+        {% else %}
+            <p><b>Tutor:</b> {{ tutor.username }}</p>
+        {% endif %}
+
+        <h3>Opis oglasa</h3>
+        <p class="opis">
+            {{ notice.description }}
+        </p>
+        <hr>
+
+        {% if notFinished %}
+            <h2>Saradnja nije gotova</h2>
+        {% elif notAllowed %}
+            <h2>Nije vasa saradnja, vratite se nazad</h2>
+        {% elif rated %}
+            <h2>Vec ste ocenili ovu saradnju</h2>
+        {% else %}
+            <h2>Ocenite saradnju</h2>
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="star-rating-wrapper">
+                    <div class="star-rating">
+                        <input type="radio" id="star5" name="rating" value="5">
+                        <label for="star5">★</label>
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4">★</label>
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3">★</label>
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2">★</label>
+                        <input type="radio" id="star1" name="rating" value="1" checked>
+                        <label for="star1">★</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="comment"><b>Komentar (opciono):</b></label>
+                    <textarea id="comment" name="comment" rows="4" placeholder="Unesite komentar..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-accept">Oceni</button>
+            </form>
+        {% endif %}
+    </main>
+</body>
+</html>

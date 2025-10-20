@@ -46,12 +46,12 @@
                 {% else %}
                 {% for notice in notices %}
                     <div class="item">
-                        <h3>{{ notice.title }}</h3>
+                        <h3><a href="{% url 'view_ad' notice.idnotice %}">{{ notice.title }}</a></h3>
                         <h4>Predmet: {{ notice.subject }}</h4>
                         <p>Tip: {{ notice.type }}</p>
-                        <p>Objavio: <b>{{ notice.idpublisher.iduser.username }}</b></p>
+                        <p>Objavio: <b><a href="{% url 'profile' %}?username={{ notice.idpublisher.iduser.username }}">{{ notice.idpublisher.iduser.username }}</a></b></p>
                         {% if notice.idtutor %}
-                            <p>Pomogao: <b>{{ notice.idtutor.iduser.username }}</b></p>
+                            <p>Pomogao: <b><a href="{% url 'profile' %}?username={{ notice.idtutor.iduser.username }}">{{ notice.idtutor.iduser.username }}</a></b></p>
                         {% endif %}
                         <div class="opis">
                             <p>{{ notice.description }}</p>
@@ -61,11 +61,7 @@
                 {% endif %}
             </div>
             <hr>
-            <h3>Ocenjivanje saradnje (Vidi samo korisnik kad prekine saradnju sa tutorom)</h3>
-            <p>Ocena (1-5): <input type="number" min="1" max="5" style="width: 50px;"></p>
-            <button class="btn">Postavi komentar</button>
-            <button class="btn">Ostani bez komentara</button>
-            <hr>
+
             <h3>Komentari drugih</h3>
             <div class="item-list">
                 {% for comment in comments %}
