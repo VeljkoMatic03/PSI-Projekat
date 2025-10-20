@@ -27,7 +27,7 @@
         <hr>
 
         {% if gotovaSaradnja %}
-            {% if request.user.id == idVlasnika or jaPomogao %}
+            {% if request.user.username == usernameVlasnika or jaPomogao %}
                 <div style="display: flex; justify-content: center; margin-top: 20px;">
                     <form method="post">
                         {% csrf_token %}
@@ -39,7 +39,7 @@
             {% endif %}
         {% endif %}
 
-        {% if request.user.id == idVlasnika and gotovaSaradnja is None %}
+        {% if request.user.username == usernameVlasnika and gotovaSaradnja is None %}
         <h3>Prijavljeni tutori</h3>
         <div class="item-list">
             {% for tutor in tutoriNeprihvaceni %}

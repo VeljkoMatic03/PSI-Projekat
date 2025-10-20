@@ -14,7 +14,7 @@ def create_ad(request):
         tip_pomoci=request.POST.get('tip_pomoci')
         opis=request.POST.get('opis')
         tagovi=request.POST.get('tagovi')
-        student=Student.objects.get(pk=request.user.id)
+        student=Student.objects.get(iduser__username=request.user.username)
         myNotice=Notice.objects.create(type=tip_pomoci, description=opis, idpublisher=student, title=naziv_oglasa, subject=predmet)
         tags=tagovi.split(',')
         for tag in tags:
@@ -93,7 +93,7 @@ def search_ads(request):
 
 def view_ad(request,id):
     oglas=Notice.objects.get(pk=id)
-    student=Student.objects.get(pk=oglas.idpublisher.iduser)
+    student=Student.objects.get(iduser__username=oglas.idpublisher.iduser.username)
     jeTutor=None
     poslaoZahtev=None
     korisnik=MyUser.objects.filter(username=request.user.username)[0]
@@ -137,7 +137,7 @@ def view_ad(request,id):
     for zahtev in aktivneKolaboracije:
         tutoriPrihvaceni.append(zahtev.idtutor)
 
-    return render(request,'view-ad.html',{'myType':myType,'oglas':oglas,'studentIme':student.name, 'studentPrezime':student.surname, 'idVlasnika':student.iduser.iduser, 'jeTutor':jeTutor, 'tutoriPrihvaceni':tutoriPrihvaceni,'tutoriNeprihvaceni':tutoriNeprihvaceni, 'poslaoZahtev' : poslaoZahtev, 'gotovaSaradnja':gotovaSaradnja, 'jaPomogao':jaPomogao})
+    return render(request,'view-ad.html',{'myType':myType,'oglas':oglas,'studentIme':student.name, 'studentPrezime':student.surname, 'usernameVlasnika':student.iduser.username, 'jeTutor':jeTutor, 'tutoriPrihvaceni':tutoriPrihvaceni,'tutoriNeprihvaceni':tutoriNeprihvaceni, 'poslaoZahtev' : poslaoZahtev, 'gotovaSaradnja':gotovaSaradnja, 'jaPomogao':jaPomogao})
 def prekini_saradnju(request,id):
     if request.method == "POST":
         tutor_id = request.POST.get("tutor_id")
