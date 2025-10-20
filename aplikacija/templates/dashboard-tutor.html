@@ -23,10 +23,13 @@
         <h1>Tutorska Tabla</h1>
         <h3>Akcije:</h3>
         <ul>
-            <li><a href="create-cv.html">Kreiraj CV</a></li>
-            <li><a href="edit-cv.html">Uredi svoj CV</a></li>
+            <li><a href={% url 'create_cv' %}>Kreiraj CV</a></li>
+            <li><a href={% url 'edit_cv' %}>Uredi svoj CV</a></li>
             <li><a href={% url 'search_ads' %}>Pretraži oglase</a></li>
-            <li><a href="#">Preuzmi svoj CV</a></li>
+            <li><a href={% url 'download_cv' %}>Preuzmi svoj CV</a></li>
+            {% if msg != None %}
+                {{ msg }}
+            {% endif %}
         </ul>
     </main>
 </body>
