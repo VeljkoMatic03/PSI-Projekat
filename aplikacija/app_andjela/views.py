@@ -10,3 +10,6 @@ def create_cv(request):
 
 def edit_cv(request):
     return render(request, 'edit-cv.html')
+
+def download_cv(request):
+    return render(request, 'dashboard-tutor.html', {'msg': "nemate cv"})
