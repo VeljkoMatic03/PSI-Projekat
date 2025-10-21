@@ -139,8 +139,10 @@ def public_profile(request):
         myType = 'Tutor'
     elif Admin.objects.filter(iduser__username=request.user.username).exists():
         myType = 'Admin'
-    listOfNotices.reverse()
-    comments.reverse()
+    if listOfNotices != None:
+        listOfNotices.reverse()
+    if comments != None:
+        comments.reverse()
     return render(request, 'public-profile.html', {'user': user,
                                                    'type': type,
                                                    'myProfile': myProfile,
