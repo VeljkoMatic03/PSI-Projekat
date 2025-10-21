@@ -31,7 +31,7 @@
                 <p><b>Broj recenzija: {{ countRating }}</b></p>
             {% endif %}
             {% if type == 'Tutor' and not myProfile %}
-                <button class="btn">Preuzmi CV</button>
+                <a class="btn" href="{% url 'download_tutors_cv' user.iduser.username %}">Preuzmi CV</a>
             {% endif %}
         </div>
         <div class="profile-main">

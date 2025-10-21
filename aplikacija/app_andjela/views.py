@@ -117,15 +117,7 @@ def edit_cv(request):
 
     return render(request, 'edit-cv.html', context)
 
-def download_cv(request):
-    user = MyUser.objects.filter(username=request.user)
-    tutor = Tutor.objects.filter(iduser=user.first().iduser)
-    cvs = Cv.objects.filter(idtutor=user.first().iduser)
-    cv = cvs.first()
-
-    if cvs is None or cv is None:
-        return render(request, 'dashboard-tutor.html', {'msg': "nemate cv"})
-
+def generate_cv(cv):
     name = cv.name
     surname = cv.surname
     aboutme = cv.aboutme
@@ -235,3 +227,29 @@ def download_cv(request):
     buffer.close()
     response.write(pdf_data)
     return response
+
+
+def download_cv(request):
+    user = MyUser.objects.filter(username=request.user)
+    tutor = Tutor.objects.filter(iduser=user.first().iduser)
+    cvs = Cv.objects.filter(idtutor=user.first().iduser)
+    cv = cvs.first()
+
+    if cvs is None or cv is None:
+        return render(request, 'dashboard-tutor.html', {'msg': "nemate cv"})
+
+    response = generate_cv(cv)
+    return response
+
+def download_tutors_cv(request, username):
+    user = MyUser.objects.filter(username=username)
+    tutor = Tutor.objects.filter(iduser=user.first().iduser)
+    cvs = Cv.objects.filter(idtutor=user.first().iduser)
+    cv = cvs.first()
+
+    if cvs is None or cv is None:
+        return redirect('profile', username=username)
+
+    response = generate_cv(cv)
+    return response
+
