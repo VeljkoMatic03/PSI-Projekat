@@ -6,9 +6,21 @@ from django.contrib.auth import logout
 # Create your views here.
 
 def adminpanel(request):
+    """
+    Prikazuje administratorski dashboard. |
+    Template:
+    :template:`dashboard-admin.html`
+    """
     return render(request, 'dashboard-admin.html')
 
 def verifyTutor(request):
+    """
+    Omogućava administratoru da potvrdi ili odbije tutora. |
+    POST parametri: 'tutor_id': ID korisnika tutora, 'action': 'verify' ili 'reject' |
+    Modeli: :model:`shared_app.Tutor`, :model:`shared_app.Verification` |
+    Template: :template:`admin-verify-tutor.html` |
+    Kontekst: 'tutors': lista tutora koji čekaju verifikaciju
+    """
     if request.method == 'POST':
         tutorid = request.POST.get('tutor_id')
         tutor = Tutor.objects.get(iduser=tutorid)
@@ -27,6 +39,17 @@ def verifyTutor(request):
     return render(request, 'admin-verify-tutor.html', {'tutors': tutors})
 
 def removeUser(request):
+    """
+   Omogućava administratoru pretragu i uklanjanje korisnika. |
+   POST parametri: 'username': korisničko ime za pretragu ,
+   'user_id': ID korisnika za brisanje,
+   'search' ili 'remove': akcija koja se vrši |
+   Modeli: :model:`shared_app.MyUser`, :model:`shared_app.Admin`, :model:`django.contrib.auth.models.User` |
+   Template: :template:`admin-remove-user.html` |
+   Kontekst: 'user': pronađeni korisnik,
+   'msgnf': poruka kada korisnik ne postoji ili je admin,
+   'msg_user_deleted': poruka o uspešnom brisanju
+    """
     user = None
     msgnf = None
     msg_user_deleted = None
@@ -62,10 +85,26 @@ def removeUser(request):
     return render(request, 'admin-remove-user.html', {'user': user, 'msgnf': msgnf, 'msg_user_deleted': msg_user_deleted})
 
 def logout_user(request):
+    """
+    Odjavljuje trenutno prijavljenog korisnika i preusmerava na početnu stranicu. |
+    Redirect: :view:`app_veljko.home`
+    """
     logout(request)
     return redirect('homepage')
 
 def public_profile(request):
+    """
+    Prikazuje javni profil korisnika (student ili tutor). |
+    GET parametri: 'username' (opciono): korisničko ime profila koji se prikazuje |
+    Modeli: :model:`shared_app.MyUser`, :model:`shared_app.Student`, :model:`shared_app.Tutor`,
+    :model:`shared_app.Admin`, :model:`shared_app.Rating`, :model:`shared_app.Notice` |
+    Template: :template:`public-profile.html` |
+    Kontekst: 'user': instanca korisnika (Student ili Tutor), 'type': tip korisnika ('Student' ili 'Tutor'),
+    'myProfile': True ako korisnik gleda svoj profil, 'isRated': True ako korisnik ima ocene,
+    'avgRating': prosečna ocena korisnika, 'countRating': broj ocena,
+    'notices': lista oglasa u kojima je učestvovao, 'myType': tip prijavljenog korisnika (onaj koji je ulogovan),
+    'comments': lista komentara o korisniku
+    """
     username = request.GET.get("username")
     user = None
     type = None
@@ -153,6 +192,12 @@ def public_profile(request):
                                                    'myType': myType,
                                                    'comments': comments})
 def home(request, tip):
+    """
+    Preusmerava korisnika na odgovarajući dashboard na osnovu tipa. |
+    Args: tip (str): 'Student', 'Tutor' ili 'Admin' |
+    Redirect: :view:`app_luka.dashboard_student`, :view:`app_andjela.dashboard_tutor`,
+    :view:`app_veljko.adminpanel`, 'homepage' ako tip nije prepoznat
+    """
     if tip == 'Student':
         return redirect('dashboard-student')
     if tip == 'Tutor':
@@ -162,6 +207,17 @@ def home(request, tip):
     return redirect('homepage')
 
 def rate(request, id):
+    """
+    Omogućava ocenjivanje korisnika nakon saradnje. |
+    POST parametri: 'rating' (int) – vrednost ocene, 'comment' (str) – komentar ocene. |
+    Modeli: :model:`shared_app.MyUser`, :model:`shared_app.Student`,
+    :model:`shared_app.Tutor`, :model:`shared_app.Admin`, :model:`shared_app.Notice`,
+    :model:`shared_app.Collaboration`, :model:`shared_app.Rating`. |
+    Kontekst: 'notice' – instanca oglasa, 'student' – student koji je učestvovao,
+    'tutor' – tutor koji je učestvovao, 'notFinished' – True ako saradnja još nije završena,
+    'myType' – tip prijavljenog korisnika, 'notAllowed' – True ako korisnik ne može da oceni,
+    'rated' – True ako je korisnik već ocenio.
+    """
     user = MyUser.objects.get(username=request.user.username)
     tip = None
     if Student.objects.filter(iduser=user).exists():
