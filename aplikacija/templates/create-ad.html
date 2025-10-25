@@ -18,7 +18,7 @@
     </header>
     <main class="container">
         <h1>Kreiraj novi oglas</h1>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group"><label>Naziv oglasa</label><input type="text" name="naziv_oglasa"></div>
             <div class="form-group">
@@ -37,7 +37,7 @@
             <div class="form-group"><label>Opis</label><textarea rows="5" name="opis"></textarea></div>
             <div class="form-group">
                 <label>Prilozi (opciono)</label>
-                <div style="border:1px solid #999; padding: 20px; text-align:center;">Drag and drop polje</div>
+                <input type="file" id="attachment" name="attachment" multiple>
             </div>
             <div class="form-group"><label>Tagovi</label><input type="text" name="tagovi"></div>
             <button type="submit" class="btn">Postavi oglas</button>

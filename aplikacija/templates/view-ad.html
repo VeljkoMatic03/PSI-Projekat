@@ -25,6 +25,17 @@
         <h3>Opis</h3>
         <p>{{ oglas.description }}</p>
         <hr>
+        <h3>Prilozi</h3>
+
+        {% if oglas.attachment %}
+            <form method="get" action="{% url 'download_attachment' oglas.idnotice %}">
+                <button type="submit" class="btn" style="background-color:#A6D785;">Preuzmi prilog</button>
+            </form>
+        {% else %}
+            <p>Nema dodatih priloga.</p>
+        {% endif %}
+
+        <hr>
 
         {% if gotovaSaradnja %}
             {% if request.user.username == usernameVlasnika or jaPomogao %}

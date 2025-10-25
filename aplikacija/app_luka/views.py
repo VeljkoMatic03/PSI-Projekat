@@ -1,6 +1,8 @@
+import base64,json
 from datetime import date
 
 from django.db.models import Avg
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from shared_app.models import Notice, Student, Tutor, Request, Collaboration, Tag, MyUser, Applied, Admin, Rating
@@ -19,8 +21,20 @@ def create_ad(request):
         tip_pomoci=request.POST.get('tip_pomoci')
         opis=request.POST.get('opis')
         tagovi=request.POST.get('tagovi')
+        attachment_file = request.FILES.get('attachment')
+
+        attachment_data = None
+        if attachment_file:
+            encoded_content = base64.b64encode(attachment_file.read()).decode('utf-8')
+            attachment_data = json.dumps({
+                "filename": attachment_file.name,
+                "content_type": attachment_file.content_type,
+                "data": encoded_content
+            })
         student=Student.objects.get(iduser__username=request.user.username)
-        myNotice=Notice.objects.create(type=tip_pomoci, description=opis, idpublisher=student, title=naziv_oglasa, subject=predmet)
+
+        myNotice=Notice.objects.create(type=tip_pomoci, description=opis, idpublisher=student, title=naziv_oglasa, subject=predmet,attachment=attachment_data)
+
         tags=tagovi.split(',')
         for tag in tags:
             if (len(tag)==0):
@@ -227,3 +241,23 @@ def posalji_zahtev(request, id):
         Request.objects.create(idnotice=notice,idtutor=tutor,isaccepted='P')
 
     return redirect('search_ads')
+
+def download_attachment(request, id):
+    """
+    Funckionalnost koja se koristi za preuzimanje priloga za odredjen :model:`shared_app.Notice` ukoliko taj oglas ima priloge.
+    """
+    notice = Notice.objects.get(idnotice=id)
+    if not notice.attachment:
+        return HttpResponse("Nema priloga za ovaj oglas.", status=404)
+
+    try:
+        attachment_info = json.loads(notice.attachment)
+        file_data = base64.b64decode(attachment_info["data"])
+        file_name = attachment_info.get("filename", "attachment.bin")
+        file_type = attachment_info.get("content_type", "application/octet-stream")
+    except Exception:
+        return HttpResponse("Invalid attachment format.", status=400)
+
+    response = HttpResponse(file_data, content_type=file_type)
+    response["Content-Disposition"] = f'attachment; filename="{file_name}"'
+    return response
