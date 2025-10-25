@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from app_veljko.views import adminpanel, verifyTutor, removeUser, logout_user, public_profile, home, rate
 from app_filip.views import homepage, register_user, login_user, reset_password
-from app_luka.views import create_ad, dashboard_student, search_ads, view_ad, prekini_saradnju, prihvati_zahtev, odbij_zahtev, posalji_zahtev
+from app_luka.views import create_ad, dashboard_student, search_ads, view_ad, prekini_saradnju, prihvati_zahtev, odbij_zahtev, posalji_zahtev, download_attachment
 from app_andjela.views import dashboard_tutor, create_cv, edit_cv, download_cv, download_tutors_cv
 from django.contrib.auth import views as auth_views
 urlpatterns = [
@@ -41,6 +41,7 @@ urlpatterns = [
     path('prihvati_zahtev/<int:id>', prihvati_zahtev, name='prihvati_zahtev'),
     path('odbij_zahtev/<int:id>', odbij_zahtev, name='odbij_zahtev'),
     path('posalji_zahtev/<int:id>', posalji_zahtev, name='posalji_zahtev'),
+    path('download_attachment/<int:id>',download_attachment,name="download_attachment"),
     path('rate/<int:id>', rate, name='rate'),
     path('dashboard_tutor/', dashboard_tutor, name='dashboard-tutor'),
     path('create_cv/', create_cv, name='create_cv'),
