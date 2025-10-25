@@ -8,6 +8,11 @@ from shared_app.models import Notice, Student, Tutor, Request, Collaboration, Ta
 
 # Create your views here.
 def create_ad(request):
+    """
+    Prikazuje stranicu za kreiranje :model:`shared_app.Notice`. |
+    Template:
+    :template:`create-ad.html`
+    """
     if request.method=="POST":
         naziv_oglasa=request.POST.get('naziv_oglasa')
         predmet=request.POST.get('predmet')
@@ -29,9 +34,19 @@ def create_ad(request):
         return redirect('dashboard-student')
     return render(request,'create-ad.html')
 def dashboard_student(request):
+    """
+    Prikazuje dashboard za :model:`shared_app.Student`. |
+    Template:
+    :template:`dashboard-student.html`
+    """
     return render(request,'dashboard-student.html')
 
 def search_ads(request):
+    """
+    Prikazuje stranicu za pretrazivanje :model:`shared_app.Notice`. |
+    Template:
+    :template:`search-ads.html`
+    """
     oglasi=Notice.objects.all()
     finalOglasi=[]
     for oglas in oglasi:
@@ -92,6 +107,11 @@ def search_ads(request):
     return render(request,'search-ads.html',{'myType':myType,'oglasi':filteredOglasi})
 
 def view_ad(request,id):
+    """
+    Prikazuje stranicu za detaljan prikaz :model:`shared_app.Notice` na osnovu id-a koji se prosledjuje view-u.|
+    Template:
+    :template:`view-ad.html`
+    """
     oglas=Notice.objects.get(pk=id)
     student=Student.objects.get(iduser__username=oglas.idpublisher.iduser.username)
     jeTutor=None
@@ -139,6 +159,9 @@ def view_ad(request,id):
 
     return render(request,'view-ad.html',{'myType':myType,'oglas':oglas,'studentIme':student.name, 'studentPrezime':student.surname, 'usernameVlasnika':student.iduser.username, 'jeTutor':jeTutor, 'tutoriPrihvaceni':tutoriPrihvaceni,'tutoriNeprihvaceni':tutoriNeprihvaceni, 'poslaoZahtev' : poslaoZahtev, 'gotovaSaradnja':gotovaSaradnja, 'jaPomogao':jaPomogao})
 def prekini_saradnju(request,id):
+    """
+    Funckionalnost koja se koristi za prekidanje saradnje izmedju :model:`shared_app.Student` i :model:`shared_app.Tutor` na osnovu id-a oglasa
+    """
     if request.method == "POST":
         tutor_id = request.POST.get("tutor_id")
         print(f"Prekini saradnju tutor_id={tutor_id}, oglas_id={id}")
@@ -156,6 +179,9 @@ def prekini_saradnju(request,id):
     return redirect('view_ad', id=id)
 
 def prihvati_zahtev(request, id):
+    """
+    Funckionalnost koja se koristi za pocetak saradnje izmedju :model:`shared_app.Student` i :model:`shared_app.Tutor` na osnovu id-a oglasa
+    """
     if request.method == "POST":
         tutor_id = request.POST.get("tutor_id")
         print(f"Prihvati zahtev tutor_id={tutor_id}, oglas_id={id}")
@@ -175,6 +201,9 @@ def prihvati_zahtev(request, id):
     return redirect('view_ad', id=id)
 
 def odbij_zahtev(request,id):
+    """
+    Funckionalnost koja se koristi za odbijanje zahteva za saradnju izmedju :model:`shared_app.Student` i :model:`shared_app.Tutor` na osnovu id-a oglasa
+    """
     if request.method == "POST":
         tutor_id = request.POST.get("tutor_id")
         print(f"Odbij zahtev tutor_id={tutor_id}, oglas_id={id}")
@@ -185,6 +214,9 @@ def odbij_zahtev(request,id):
     return redirect('view_ad',id=id)
 
 def posalji_zahtev(request, id):
+    """
+    Funckionalnost koja se koristi za slanje zahteva za saradnju izmedju :model:`shared_app.Student` i :model:`shared_app.Tutor` na osnovu id-a oglasa
+    """
     if request.method == "POST":
         tutor_username = request.POST.get("tutor_username")
 
