@@ -1,9 +1,11 @@
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
-from shared_app.models import Admin, MyUser, Student, Tutor, Verification
+from django.urls import reverse
+
+from shared_app.models import Admin, MyUser, Student, Tutor, Verification, Notice, Collaboration, Rating
 from django.contrib.auth.hashers import make_password
 
-class AdminVerifyRemoveTests(TestCase):
+class AdminUserTutorFuncionalitiesTests(TestCase):
     def setUp(self):
         self.user_admin = User.objects.create_superuser(
             username="admin",
@@ -93,9 +95,63 @@ class AdminVerifyRemoveTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-        # Proveri da je tutor verifikovan
         self.tutorVerify.refresh_from_db()
         self.assertEqual(self.tutorVerify.isverified, 1)
 
-        # Proveri da je verification obrisan
         self.assertFalse(Verification.objects.filter(iduser=self.tutorVerify).exists())
+
+    def test_admin_remove_nonexistent_user(self):
+        response = self.client.post("/admin_panel/remove/", {
+            "username": "nonexistent_user",
+            "search": "Search"
+        }, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Nema korisnika sa tim korisnickim imenom")
+
+    def test_admin_remove_admin_user(self):
+        response = self.client.post("/admin_panel/remove/", {
+            "username": "admin",
+            "search": "Search"
+        }, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Admin se ne moze ukloniti")
+
+    def test_admin_reject_tutor(self):
+        response = self.client.post("/admin_panel/verify/", {
+            "tutor_id": self.tutorVerify.iduser.iduser,
+            "action": "reject"
+        }, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        self.tutorVerify.refresh_from_db()
+        self.assertEqual(self.tutorVerify.isverified, 0)
+
+        self.assertFalse(Verification.objects.filter(iduser=self.tutorVerify).exists())
+
+    def test_student_rates_tutor(self):
+        self.client.force_login(self.user_toDelete)
+        notice = Notice.objects.create(
+            title="Test Oglas",
+            subject="Matematika",
+            type="Help",
+            description="Opis",
+            idpublisher=self.toDelete
+        )
+        collab = Collaboration.objects.create(
+            idnotice=notice,
+            idstudent=self.toDelete,
+            idtutor=self.tutorVerify,
+            datebegin="2025-10-01",
+            dateend="2025-10-10"
+        )
+
+        url = reverse('rate', args=[notice.idnotice])
+        response = self.client.post(url, {
+            "rating": "5",
+            "comment": "Super tutor"
+        }, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        rating = Rating.objects.get(idcollaboration=collab, idratinguser=self.target_user)
+        self.assertEqual(rating.value, 5)
+        self.assertEqual(rating.comment, "Super tutor")
