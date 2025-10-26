@@ -27,5 +27,28 @@
             <li><a href="{% url 'search_ads' %}">Pretraži oglase</a></li>
         </ul>
     </main>
+<div class="container">
+            <h2>Pretraga na Wikipediji</h2>
+
+            <form method="GET" action="{% url 'wiki_search' %}" class="filter-form">
+                <div class="form-group">
+                    <label for="query">Unesi pojam za pretragu:</label>
+                    <input type="text" id="query" name="query" placeholder="npr. Python programming" required>
+                </div>
+                <button type="submit" class="btn">Pretraži</button>
+            </form>
+
+            {% if results %}
+                <div class="item-list">
+                    {% for item in results %}
+                        <div class="item">
+                            <h3><a href="https://en.wikipedia.org/wiki/{{ item.title|urlencode }}" target="_blank">{{ item.title }}</a></h3>
+                            <p>{{ item.snippet|safe }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% elif searched %}
+                <p>Nema rezultata za "{{ searched }}"</p>
+            {% endif%}</div>
 </body>
 </html>

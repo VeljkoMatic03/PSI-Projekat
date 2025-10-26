@@ -252,4 +252,5 @@ def download_tutors_cv(request, username):
 
     response = generate_cv(cv)
     return response
-
+def wiki_search(request):
+    return
