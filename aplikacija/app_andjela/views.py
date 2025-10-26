@@ -1,6 +1,7 @@
 import base64
 from io import BytesIO
 
+import requests
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from reportlab.lib import colors
@@ -8,7 +9,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
-from shared_app.models import Cv, Tutor, MyUser
+from shared_app.models import Cv, Tutor, MyUser, Student
 
 
 # Create your views here.
@@ -253,4 +254,34 @@ def download_tutors_cv(request, username):
     response = generate_cv(cv)
     return response
 def wiki_search(request):
-    return
+    query = request.GET.get("query", "")
+    results = []
+    searched = False
+
+    if query:
+        searched = query
+        url = "https://en.wikipedia.org/w/api.php"
+        params = {
+            "action": "query",
+            "list": "search",
+            "srsearch": query,
+            "format": "json",
+        }
+        headers = {
+            "User-Agent": "StudyBuddyApp/1.0 (localhost development)"
+        }
+
+        response = requests.get(url, params=params, headers=headers)
+
+        print(response.url)
+        print(response.status_code)
+        print(response.text[:500])
+
+        if response.status_code == 200:
+            data = response.json()
+            results = data["query"]["search"]
+
+    if Student.objects.filter(iduser__username=request.user.username).exists():
+        return render(request, "dashboard-student.html", {"results": results, "searched": searched})
+    elif Tutor.objects.filter(iduser__username=request.user.username).exists():
+        return render(request, "dashboard-tutor.html", {"results": results, "searched": searched})
