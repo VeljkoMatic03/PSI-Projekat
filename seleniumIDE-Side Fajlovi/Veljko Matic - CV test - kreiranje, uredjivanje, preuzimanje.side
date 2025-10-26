@@ -1,0 +1,246 @@
+{
+  "id": "64fa61a8-b0ef-4c03-bc72-a4246516e438",
+  "version": "2.0",
+  "name": "CV test",
+  "url": "http://localhost:8000",
+  "tests": [{
+    "id": "c5d1237d-27f5-4af6-b64c-4014bd771810",
+    "name": "Preuzimanje CV - neuspesno - ne postoji CV",
+    "commands": [{
+      "id": "1607ae23-b627-4682-94fc-f4a39b3eb765",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0c25cbac-75b2-47fb-bed9-2c7931a2e568",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "978x816",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8ec5e654-3072-43f2-81b6-72d4b1737be7",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Prijavi se",
+      "targets": [
+        ["linkText=Prijavi se", "linkText"],
+        ["css=nav > a:nth-child(1)", "css:finder"],
+        ["xpath=//a[contains(text(),'Prijavi se')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/login/')]", "xpath:href"],
+        ["xpath=//nav/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Prijavi se')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "fcf86ee9-c56b-4aba-a83e-613189996f15",
+      "comment": "",
+      "command": "click",
+      "target": "name=username",
+      "targets": [
+        ["name=username", "name"],
+        ["css=.form-group:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='username']", "xpath:attributes"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "4714d131-23af-4bc6-8942-d1454ae6531c",
+      "comment": "",
+      "command": "type",
+      "target": "name=username",
+      "targets": [
+        ["name=username", "name"],
+        ["css=.form-group:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='username']", "xpath:attributes"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": "nocv"
+    }, {
+      "id": "23fef272-2a14-4df7-bd86-ba2735c59158",
+      "comment": "",
+      "command": "type",
+      "target": "name=password",
+      "targets": [
+        ["name=password", "name"],
+        ["css=.form-group:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='password']", "xpath:attributes"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "123"
+    }, {
+      "id": "2d5c5f0a-83bb-44f3-87a3-6c9ca8c1af72",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "name=password",
+      "targets": [
+        ["name=password", "name"],
+        ["css=.form-group:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='password']", "xpath:attributes"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "${KEY_ENTER}"
+    }, {
+      "id": "39347af9-daf1-4fc2-81f5-7dcf8e7d99a4",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Preuzmi svoj CV",
+      "targets": [
+        ["linkText=Preuzmi svoj CV", "linkText"],
+        ["css=li:nth-child(4) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Preuzmi svoj CV')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/download_cv/')]", "xpath:href"],
+        ["xpath=//li[4]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Preuzmi svoj CV')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c4cac1ce-79b3-4f5d-8433-2ba8d061ecba",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=ul",
+      "targets": [
+        ["css=ul", "css:finder"],
+        ["xpath=//ul", "xpath:position"]
+      ],
+      "value": "Kreiraj CV\\nUredi svoj CV\\nPretraži oglase\\nPreuzmi svoj CV\\nnemate cv"
+    }]
+  }, {
+    "id": "5705fc41-a817-4411-8aa5-5d17a40c2504",
+    "name": "Kreiranje CV - neuspesno",
+    "commands": [{
+      "id": "231f0113-1b98-470e-a449-b035b962f529",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "182e5bf6-60ec-4dc1-b45a-84cb25bf10ab",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "978x816",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8145e48e-bd06-4c1f-8ee2-2abdaf685914",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Prijavi se",
+      "targets": [
+        ["linkText=Prijavi se", "linkText"],
+        ["css=nav > a:nth-child(1)", "css:finder"],
+        ["xpath=//a[contains(text(),'Prijavi se')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/login/')]", "xpath:href"],
+        ["xpath=//nav/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Prijavi se')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "52aa51ab-8ff8-4514-b67a-e7491441c609",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Kreiraj CV",
+      "targets": [
+        ["linkText=Kreiraj CV", "linkText"],
+        ["css=li:nth-child(1) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Kreiraj CV')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/create_cv/')]", "xpath:href"],
+        ["xpath=//li/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Kreiraj CV')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9fa6c9b7-c168-43df-9b59-de386cac3420",
+      "comment": "",
+      "command": "click",
+      "target": "css=.btn",
+      "targets": [
+        ["css=.btn", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Sačuvaj')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "5ec44c3a-2ec3-491d-8a56-af09a5b58594",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.form-group:nth-child(4)",
+      "targets": [
+        ["css=.form-group:nth-child(4)", "css:finder"],
+        ["xpath=//div[3]", "xpath:position"],
+        ["xpath=//div[contains(.,'Slika')]", "xpath:innerText"]
+      ],
+      "value": "Slika"
+    }]
+  }, {
+    "id": "678c450c-0c33-4bd2-9cf7-d8518559ff2d",
+    "name": "Uredi CV - uspesno",
+    "commands": [{
+      "id": "c922ff6c-80bd-486b-af6e-328ecd0506c5",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "aefeb276-93d4-404d-8b85-3debb2a34234",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "980x816",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3e03ce33-ce61-445c-99b2-1ddea41f2a77",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Prijavi se",
+      "targets": [
+        ["linkText=Prijavi se", "linkText"],
+        ["css=nav > a:nth-child(1)", "css:finder"],
+        ["xpath=//a[contains(text(),'Prijavi se')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/login/')]", "xpath:href"],
+        ["xpath=//nav/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Prijavi se')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "dbeb8a7d-937f-4c8c-8ff7-aea08332b3a0",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Uredi svoj CV",
+      "targets": [
+        ["linkText=Uredi svoj CV", "linkText"],
+        ["css=li:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Uredi svoj CV')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/edit_cv/')]", "xpath:href"],
+        ["xpath=//li[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Uredi svoj CV')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c34959ba-b703-4d88-8cea-bd621f9d0e23",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=body",
+      "targets": [
+        ["css=body", "css:finder"],
+        ["xpath=//body", "xpath:position"]
+      ],
+      "value": "StudyBuddy\\nNazad na tablu\\nUredi CV\\nIme\\nPrezime\\nSlika\\nO meni\\ntest\\nEdukacija\\ntest\\nProjekti\\ntest\\nIskustvo\\ntest\\nSačuvaj"
+    }]
+  }],
+  "suites": [{
+    "id": "1b37be4a-00ea-480c-8e5d-76047ca33045",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["c5d1237d-27f5-4af6-b64c-4014bd771810"]
+  }],
+  "urls": ["http://localhost:8000/"],
+  "plugins": []
+}

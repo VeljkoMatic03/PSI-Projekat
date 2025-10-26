@@ -19,7 +19,7 @@ class MyUser(models.Model):
     isactive = models.IntegerField(db_column='isActive')  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'user'
 
 class Student(models.Model):
@@ -36,7 +36,7 @@ class Student(models.Model):
     dateofbirth = models.DateField(db_column='dateOfBirth', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'student'
 
 class Tutor(models.Model):
@@ -54,7 +54,7 @@ class Tutor(models.Model):
     isverified = models.IntegerField(db_column='isVerified')  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'tutor'
 
 
@@ -68,7 +68,7 @@ class Admin(models.Model):
     iduser = models.OneToOneField(MyUser, models.CASCADE, db_column='idUser', primary_key=True)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'admin'
 
 
@@ -83,7 +83,7 @@ class Applied(models.Model):
     idnotice = models.ForeignKey('Notice', models.CASCADE, db_column='idNotice')  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'applied'
 
 
@@ -103,7 +103,7 @@ class Collaboration(models.Model):
     dateend = models.DateField(db_column='dateEnd', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'collaboration'
 
 
@@ -125,7 +125,7 @@ class Cv(models.Model):
     experience = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'cv'
 
 
@@ -148,7 +148,7 @@ class Notice(models.Model):
     idtutor = models.ForeignKey('Tutor', models.DO_NOTHING, db_column='idTutor', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'notice'
 
 
@@ -169,7 +169,7 @@ class Rating(models.Model):
     idcollaboration = models.ForeignKey(Collaboration, models.CASCADE, db_column='idCollaboration')  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'rating'
 
 
@@ -186,7 +186,7 @@ class Request(models.Model):
     isaccepted = models.CharField(db_column='isAccepted', max_length=1)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'request'
 
 
@@ -201,7 +201,7 @@ class Tag(models.Model):
     value = models.CharField(unique=True, max_length=45)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'tag'
 
 class Verification(models.Model):
@@ -216,5 +216,5 @@ class Verification(models.Model):
     iduser = models.OneToOneField(Tutor, models.CASCADE, db_column='idUser')  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'verification'
