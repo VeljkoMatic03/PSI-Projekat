@@ -15,9 +15,20 @@ from shared_app.models import Cv, Tutor, MyUser, Student
 # Create your views here.
 
 def dashboard_tutor(request):
+    """
+    Ucitava stranicu :template:`dashboard-tutor.html` sa osnovnim funkcionalnostima ulogovanog tutora
+    """
     return render(request, 'dashboard-tutor.html')
 
 def create_cv(request):
+    """
+    Kreira CV za trenutno prijavljenog tutora.
+
+    Ako tutor već ima CV, prikazuje poruku o tome.
+    U suprotnom, uzima podatke iz forme (ime, prezime, slika, opis, obrazovanje,
+    projekti, iskustvo), čuva ih u bazi pomocu modela :model:`shared_app.Cv` i preusmerava korisnika na tutorsku tablu :template:`dashboard-tutor.html`.
+    Kod GET zahteva prikazuje formu za unos na stranici :template:`create-cv.html`.
+    """
     if request.method == 'POST':
         user = MyUser.objects.filter(username=request.user)
         tutor = Tutor.objects.filter(iduser=user.first().iduser)
@@ -55,6 +66,13 @@ def create_cv(request):
     return render(request, 'create-cv.html')
 
 def edit_cv(request):
+    """
+    Omogućava tutorima da izmene svoj postojeći CV.
+
+    Ako tutor ima kreiran CV, postojeći podaci se učitavaju u formu radi izmene.
+    Nakon slanja forme, novi podaci se čuvaju u bazi pomocu modela :model:`shared_app.Cv`, uključujući mogućnost
+    promene ili uklanjanja slike. Ako tutor nema CV, prikazuje se poruka o tome.
+    """
     user = MyUser.objects.filter(username=request.user)
     tutor = Tutor.objects.filter(iduser=user.first().iduser)
     cv = Cv.objects.filter(idtutor=user.first().iduser)
@@ -231,6 +249,12 @@ def generate_cv(cv):
 
 
 def download_cv(request):
+    """
+    Omogućava tutoru da preuzme svoj CV.
+
+    Pronalazi CV trenutno prijavljenog tutora i, ako postoji, generiše
+    i vraća ga kao fajl za preuzimanje. Ako tutor nema CV, prikazuje se poruka o tome.
+    """
     user = MyUser.objects.filter(username=request.user)
     tutor = Tutor.objects.filter(iduser=user.first().iduser)
     cvs = Cv.objects.filter(idtutor=user.first().iduser)
@@ -243,6 +267,13 @@ def download_cv(request):
     return response
 
 def download_tutors_cv(request, username):
+    """
+    Omogućava preuzimanje CV-a nekog tutora na osnovu njegovog korisničkog imena.
+
+    Pronalazi tutora i njegov CV prema prosleđenom korisničkom imenu.
+    Ako CV postoji, generiše se fajl za preuzimanje; u suprotnom,
+    korisnik se preusmerava nazad na profil tog tutora.
+    """
     user = MyUser.objects.filter(username=username)
     tutor = Tutor.objects.filter(iduser=user.first().iduser)
     cvs = Cv.objects.filter(idtutor=user.first().iduser)
@@ -254,6 +285,12 @@ def download_tutors_cv(request, username):
     response = generate_cv(cv)
     return response
 def wiki_search(request):
+    """
+    Pretražuje Wikipedia API na osnovu unetog upita i prikazuje rezultate na odgovarajućem panelu.
+
+    Prima GET parametar 'query', šalje zahtev Wikipedia API-ju i vraća listu rezultata
+    pretrage korisniku — studentu ili tutoru, u zavisnosti od tipa prijavljenog korisnika.
+    """
     query = request.GET.get("query", "")
     results = []
     searched = False
