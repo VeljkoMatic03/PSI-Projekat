@@ -118,7 +118,7 @@ class Cv(models.Model):
     idtutor = models.OneToOneField(Tutor, models.CASCADE, db_column='idTutor')  # Field name made lowercase.
     name = models.CharField(max_length=45)
     surname = models.CharField(max_length=45)
-    picture = models.TextField(blank=True, null=True)
+    picture = models.BinaryField(blank=True, null=True)
     aboutme = models.TextField(db_column='aboutMe', blank=True, null=True)  # Field name made lowercase.
     education = models.TextField()
     projects = models.TextField(blank=True, null=True)

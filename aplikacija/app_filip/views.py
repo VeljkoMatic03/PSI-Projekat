@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.contrib.auth import login, authenticate
 
-from shared_app.models import MyUser, Student, Tutor, Admin
+from shared_app.models import MyUser, Student, Tutor, Admin, Verification
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 
@@ -65,13 +65,14 @@ def register_user(request):
                 dateofbirth=datum
             )
         elif role == 'tutor':
-            Tutor.objects.create(
+            tutor = Tutor.objects.create(
                 iduser=myuser,
                 name=ime,
                 surname=prezime,
                 dateofbirth=datum,
                 isverified=0
             )
+            Verification.objects.create(iduser=tutor)
         return redirect('homepage')
     return render(request, 'register.html', {'msg': msgError})
 

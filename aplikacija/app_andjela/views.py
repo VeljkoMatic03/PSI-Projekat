@@ -46,7 +46,7 @@ def create_cv(request):
         projekti = request.POST['projekti']
         iskustvo = request.POST['iskustvo']
         if slika:
-            slika_data = base64.b64encode(slika.read()).decode('utf-8')
+            slika_data = slika.read()
         else:
             slika_data = None
 
@@ -96,10 +96,11 @@ def edit_cv(request):
         context['projects'] = cv.first().projects
         context['experience'] = cv.first().experience
 
-        if isinstance(cv.first().picture, bytes):
-            context['slika'] = cv.first().picture.decode('utf-8')  # pretvori bytes u string
-        else:
-            context['slika'] = cv.first().picture
+        if cv.first().picture:
+            if isinstance(cv.first().picture, bytes):
+                context['slika'] = base64.b64encode(cv.first().picture).decode('ascii')
+            else:
+                context['slika'] = cv.first().picture  # fallback ako je iz starog zapisa
 
     if request.method == 'POST':
         if cv is None:
@@ -124,7 +125,7 @@ def edit_cv(request):
         noviCV.projects = projekti
         noviCV.experience = iskustvo
         if slika:
-            noviCV.picture = base64.b64encode(slika.read()).decode('utf-8')
+            noviCV.picture = slika.read()
             noviCV.save(update_fields=['name', 'surname', 'aboutme', 'education', 'projects', 'experience', 'picture'])
         elif promeniSliku:
             noviCV.picture = None
@@ -147,9 +148,15 @@ def generate_cv(cv):
 
     img_reader = None
     if picture:
+        from io import BytesIO
+        from reportlab.lib.utils import ImageReader
+        import base64
+
         if isinstance(picture, bytes):
-            picture = picture.decode('utf-8')
-        img_data = base64.b64decode(picture)
+            img_data = picture
+        else:
+            img_data = base64.b64decode(picture)
+
         img_reader = ImageReader(BytesIO(img_data))
 
     # Priprema PDF fajla
