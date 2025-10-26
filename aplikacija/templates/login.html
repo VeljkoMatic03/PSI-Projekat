@@ -15,7 +15,7 @@
         <form method="post">
             {% csrf_token %}
             <div class="form-group">
-                <label>Korisničko ime</label>
+                <label>Korisnicko ime</label>
                 <input type="text" name="username" required>
             </div>
             <div class="form-group">
@@ -28,8 +28,8 @@
         {% if error != None %}
             <h2>{{ error }}</h2>
         {% endif %}
-        <a href="{% url 'password_reset'  %}" >Zavoravili ste lozinku?</a><br>
-        <a href="{% url 'homepage' %}">Nazad na početnu</a>
+        <a href="{% url 'password_reset'  %}" >Zaboravili ste lozinku?</a><br>
+        <a href="{% url 'homepage' %}">Nazad na pocetnu</a>
     </div>
 </body>
 </html>
