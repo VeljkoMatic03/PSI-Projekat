@@ -2,6 +2,14 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 from shared_app.models import MyUser, Student, Tutor, Admin
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
+import time
 
 
 class LoginUserTests(TestCase):
@@ -115,3 +123,185 @@ class RegisterUserTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Postoji korisnik')
 
+
+##########################################################################
+
+class LoginSeleniumTests(StaticLiveServerTestCase):
+    """
+    Selenium testovi za login funkcionalnost
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        cls.driver = webdriver.Chrome(
+            service=Service(ChromeDriverManager().install()), options=chrome_options
+        )
+        cls.driver.implicitly_wait(5)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.driver.quit()
+        super().tearDownClass()
+
+    def setUp(self):
+        # Kreiramo korisnike u bazi
+        self.user_student = User.objects.create_user(username='student1', password='123', email='s1@mail.com')
+        self.user_tutor = User.objects.create_user(username='tutor1', password='123', email='t1@mail.com')
+        self.user_admin = User.objects.create_superuser(username='admin1', password='adminpass', email='a1@mail.com')
+
+        self.my_student = MyUser.objects.create(username='student1', email='s1@mail.com', password='123', isactive=1, isbanned=0)
+        self.my_tutor = MyUser.objects.create(username='tutor1', email='t1@mail.com', password='123', isactive=1, isbanned=0)
+
+        Student.objects.create(iduser=self.my_student, name='Pera', surname='Peric', dateofbirth='2000-01-01')
+        Tutor.objects.create(iduser=self.my_tutor, name='Mika', surname='Mikic', dateofbirth='1995-01-01', isverified=1)
+
+    def test_student_login_success(self):
+        """Uspesna prijava studenta"""
+        self.driver.get(f"{self.live_server_url}{reverse('login')}")
+        self.driver.find_element(By.NAME, "username").send_keys("student1")
+        self.driver.find_element(By.NAME, "password").send_keys("123")
+        self.driver.find_element(By.CSS_SELECTOR, ".btn").click()
+        time.sleep(5)
+
+        body = self.driver.page_source
+        self.assertNotIn("Prijavi se", body)
+
+    def test_tutor_login_success(self):
+        """Uspesna prijava tutora"""
+        self.driver.get(f"{self.live_server_url}{reverse('login')}")
+        self.driver.find_element(By.NAME, "username").send_keys("tutor1")
+        self.driver.find_element(By.NAME, "password").send_keys("123")
+        self.driver.find_element(By.CSS_SELECTOR, ".btn").click()
+        time.sleep(5)
+
+        body = self.driver.page_source
+        self.assertNotIn("Prijavi se", body)
+
+    def test_admin_login_success(self):
+        """Uspesna prijava admina"""
+        self.driver.get(f"{self.live_server_url}{reverse('login')}")
+        self.driver.find_element(By.NAME, "username").send_keys("admin1")
+        self.driver.find_element(By.NAME, "password").send_keys("adminpass")
+        self.driver.find_element(By.CSS_SELECTOR, ".btn").click()
+        time.sleep(5)
+
+        body = self.driver.page_source
+        self.assertNotIn("Prijavi se", body)
+
+    def test_invalid_login_failure(self):
+        """Neuspesna prijava sa pogresnim podacima"""
+        self.driver.get(f"{self.live_server_url}{reverse('login')}")
+        self.driver.find_element(By.NAME, "username").send_keys("nesto")
+        self.driver.find_element(By.NAME, "password").send_keys("nesto")
+        self.driver.find_element(By.CSS_SELECTOR, ".btn").click()
+        time.sleep(5)
+
+        body = self.driver.page_source
+        self.assertIn("Prijavi se", body)
+        
+        
+class RegistrationSeleniumTests(StaticLiveServerTestCase):
+    """
+    Selenium testovi za formu registracije korisnika (student/tutor).
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        cls.driver = webdriver.Chrome(
+            service=Service(ChromeDriverManager().install()), options=chrome_options
+        )
+        cls.driver.implicitly_wait(5)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.driver.quit()
+        super().tearDownClass()
+
+    def setUp(self):
+        return
+
+    def fill_registration_form(self, ime, prezime, email, datum, username, password, role):
+        """Pomoćna metoda za popunjavanje forme"""
+        driver = self.driver
+        driver.get(f"{self.live_server_url}/register/")
+        print("              ", role)
+        driver.find_element(By.NAME, "ime").send_keys(ime)
+        driver.find_element(By.NAME, "prezime").send_keys(prezime)
+        driver.find_element(By.NAME, "email").send_keys(email)
+        driver.find_element(By.NAME, "datum").send_keys(datum)
+        driver.find_element(By.NAME, "username").send_keys(username)
+        driver.find_element(By.NAME, "password").send_keys(password)
+        driver.find_element(By.CSS_SELECTOR, f"input[name='role'][value='{role}']").click()
+        driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+        time.sleep(5)
+
+    def test_successful_student_registration(self):
+        """Test uspešne registracije studenta"""
+        self.fill_registration_form(
+            ime="Marko",
+            prezime="Markovic",
+            email="marko@mail.com",
+            datum="2000-05-10",
+            username="student1",
+            password="123",
+            role="student"
+        )
+        self.assertEqual(MyUser.objects.filter(username="student1").exists(), True)
+        self.assertEqual(Student.objects.filter(iduser__username="student1").exists(), True)
+
+
+    def test_successful_tutor_registration(self):
+        """Test uspešne registracije tutora"""
+        self.fill_registration_form(
+            ime="Ana",
+            prezime="Anic",
+            email="ana@mail.com",
+            datum="2000-05-10",
+            username="tutor1",
+            password="123",
+            role="tutor"
+        )
+        self.assertEqual(MyUser.objects.filter(username="tutor1").exists(), True)
+        self.assertEqual(Tutor.objects.filter(iduser__username="tutor1").exists(), True)
+
+    def test_username_already_taken(self):
+        """Test neuspešne registracije – korisničko ime zauzeto."""
+        user=MyUser.objects.create(username="tutor1", email="isto@mail.com", password="123", isactive=1, isbanned=0)
+        Student.objects.create(iduser=user, name="isto", surname="ime", dateofbirth="2003-01-01")
+
+        self.fill_registration_form(
+            ime="Ana",
+            prezime="Anic",
+            email="ana@mail.com",
+            datum="2000-05-10",
+            username="tutor1",
+            password="123",
+            role="tutor"
+        )
+
+        body = self.driver.page_source
+        self.assertIn("Postoji korisnik", body)
+      
+
+    def test_missing_required_field(self):
+        """Test neuspešne registracije – obavezno polje (ime) nije popunjeno"""
+        driver = self.driver
+        driver.get(f"{self.live_server_url}/register/")
+        driver.find_element(By.NAME, "prezime").send_keys("Nemanja")
+        driver.find_element(By.NAME, "email").send_keys("n@mail.com")
+        driver.find_element(By.NAME, "datum").send_keys("2001-11-02")
+        driver.find_element(By.NAME, "username").send_keys("bezimena")
+        driver.find_element(By.NAME, "password").send_keys("123")
+        driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+        time.sleep(5)
+
+        invalid_inputs = driver.find_elements(By.CSS_SELECTOR, "input:invalid")
+        self.assertTrue(any(inp.get_attribute("name") == "ime" for inp in invalid_inputs))
