@@ -1,3 +1,4 @@
+#Filip Pantic
 import time
 from django.test import LiveServerTestCase
 from django.urls import reverse
@@ -64,7 +65,7 @@ class SearchAdsTest(LiveServerTestCase):
         driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
 
         wait = WebDriverWait(driver, 10)
-        expected_title_selector = (By.CSS_SELECTOR, ".item h3")
+        expected_title_selector = (By.CSS_SELECTOR, ".item h5")
 
         wait.until(EC.text_to_be_present_in_element(expected_title_selector, "Python"))
 
@@ -95,7 +96,7 @@ class SearchAdsTest(LiveServerTestCase):
 
         results = driver.find_elements(By.CLASS_NAME, "item")
         self.assertEqual(len(results), 1)
-        self.assertIn("Web", results[0].find_element(By.TAG_NAME, "h3").text)
+        self.assertIn("Web", results[0].find_element(By.TAG_NAME, "h5").text)
 
 
 class SearchAdsUnitTests(TestCase):

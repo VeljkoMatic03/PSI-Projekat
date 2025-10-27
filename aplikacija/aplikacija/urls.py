@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+#Andjela Dimitrijevic, Veljko Matic, Filip Pantic, Luka Zdravic
 from django.contrib import admin
 from django.urls import path, include
 from app_veljko.views import adminpanel, verifyTutor, removeUser, logout_user, public_profile, home, rate

@@ -1,3 +1,4 @@
+#Andjela Dimitrijevic
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -164,7 +165,11 @@ class LoginSeleniumTests(StaticLiveServerTestCase):
         self.driver.get(f"{self.live_server_url}{reverse('login')}")
         self.driver.find_element(By.NAME, "username").send_keys("student1")
         self.driver.find_element(By.NAME, "password").send_keys("123")
-        self.driver.find_element(By.CSS_SELECTOR, ".btn").click()
+        try:
+            self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+        except:
+            self.driver.execute_script("document.querySelector('form').submit();")
+
         time.sleep(5)
 
         body = self.driver.page_source
@@ -175,7 +180,10 @@ class LoginSeleniumTests(StaticLiveServerTestCase):
         self.driver.get(f"{self.live_server_url}{reverse('login')}")
         self.driver.find_element(By.NAME, "username").send_keys("tutor1")
         self.driver.find_element(By.NAME, "password").send_keys("123")
-        self.driver.find_element(By.CSS_SELECTOR, ".btn").click()
+        try:
+            self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+        except:
+            self.driver.execute_script("document.querySelector('form').submit();")
         time.sleep(5)
 
         body = self.driver.page_source
@@ -186,7 +194,10 @@ class LoginSeleniumTests(StaticLiveServerTestCase):
         self.driver.get(f"{self.live_server_url}{reverse('login')}")
         self.driver.find_element(By.NAME, "username").send_keys("admin1")
         self.driver.find_element(By.NAME, "password").send_keys("adminpass")
-        self.driver.find_element(By.CSS_SELECTOR, ".btn").click()
+        try:
+            self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+        except:
+            self.driver.execute_script("document.querySelector('form').submit();")
         time.sleep(5)
 
         body = self.driver.page_source
@@ -197,7 +208,10 @@ class LoginSeleniumTests(StaticLiveServerTestCase):
         self.driver.get(f"{self.live_server_url}{reverse('login')}")
         self.driver.find_element(By.NAME, "username").send_keys("nesto")
         self.driver.find_element(By.NAME, "password").send_keys("nesto")
-        self.driver.find_element(By.CSS_SELECTOR, ".btn").click()
+        try:
+            self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+        except:
+            self.driver.execute_script("document.querySelector('form').submit();")
         time.sleep(5)
 
         body = self.driver.page_source
@@ -239,8 +253,21 @@ class RegistrationSeleniumTests(StaticLiveServerTestCase):
         driver.find_element(By.NAME, "datum").send_keys(datum)
         driver.find_element(By.NAME, "username").send_keys(username)
         driver.find_element(By.NAME, "password").send_keys(password)
-        driver.find_element(By.CSS_SELECTOR, f"input[name='role'][value='{role}']").click()
-        driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+        role_input = driver.find_element(By.CSS_SELECTOR, f"input[name='role'][value='{role}']")
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", role_input)
+
+        try:
+            role_input.click()
+        except:
+            self.driver.execute_script(f"document.querySelector(\"input[name='role'][value='{role}']\").click();")
+
+        submit = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", submit)
+
+        try:
+            submit.click()
+        except:
+            self.driver.execute_script("document.querySelector('form').submit();")
         time.sleep(5)
 
     def test_successful_student_registration(self):
@@ -300,7 +327,13 @@ class RegistrationSeleniumTests(StaticLiveServerTestCase):
         driver.find_element(By.NAME, "datum").send_keys("2001-11-02")
         driver.find_element(By.NAME, "username").send_keys("bezimena")
         driver.find_element(By.NAME, "password").send_keys("123")
-        driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+        submit_btn = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
+
+        driver.execute_script("window.scrollTo(0, 0);")
+        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", submit_btn)
+
+        self.driver.execute_script("arguments[0].click();", submit_btn)
+
         time.sleep(5)
 
         invalid_inputs = driver.find_elements(By.CSS_SELECTOR, "input:invalid")

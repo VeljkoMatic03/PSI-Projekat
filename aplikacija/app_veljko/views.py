@@ -6,6 +6,7 @@ from shared_app.models import MyUser, Verification, Tutor, Admin, Student, Ratin
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 
+#Veljko Matic, Andjela Dimitrijevic
 # Create your views here.
 
 def adminpanel(request):
@@ -16,7 +17,6 @@ def adminpanel(request):
     """
     return render(request, 'dashboard-admin.html')
 
-@login_required
 def verifyTutor(request):
     """
     Omogućava administratoru da potvrdi ili odbije tutora. |
@@ -42,7 +42,6 @@ def verifyTutor(request):
         tutors.append(verification.iduser)
     return render(request, 'admin-verify-tutor.html', {'tutors': tutors})
 
-@login_required()
 def removeUser(request):
     """
    Omogućava administratoru pretragu i uklanjanje korisnika. |

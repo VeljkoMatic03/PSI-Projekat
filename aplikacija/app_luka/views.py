@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 
 from shared_app.models import Notice, Student, Tutor, Request, Collaboration, Tag, MyUser, Applied, Admin, Rating
 
+#Luka Zdravic
 
 # Create your views here.
 @login_required
@@ -58,7 +59,6 @@ def dashboard_student(request):
     """
     return render(request,'dashboard-student.html')
 
-@login_required
 def search_ads(request):
     """
     Prikazuje stranicu za pretrazivanje :model:`shared_app.Notice`. |

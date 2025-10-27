@@ -1,3 +1,4 @@
+#Veljko Matic, Andjela Dimitrijevic
 from django.contrib import admin
 from .models import (
     MyUser, Student, Tutor, Admin, Applied, Collaboration, Cv,

@@ -1,3 +1,4 @@
+#Veljko Matic, Andjela Dimitrijevic, Luka Zdravic, Filip Pantic
 from django.db import models
 from django.contrib.auth.models import User
 

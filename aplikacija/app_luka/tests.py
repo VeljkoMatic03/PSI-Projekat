@@ -8,9 +8,11 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from django.urls import reverse
+from webdriver_manager.chrome import ChromeDriverManager
 
 from shared_app.models import Admin, MyUser, Student, Tutor, Verification, Notice, Collaboration, Rating
 from django.contrib.auth.hashers import make_password
+#Luka Zdravic
 
 class AdminUserTutorFuncionalitiesTests(TestCase):
     def setUp(self):
@@ -168,14 +170,11 @@ EDGE_DRIVER_PATH = r"C:\Users\lukaz\Downloads\edgedriver_win64\msedgedriver.exe"
 
 class AdminPanelTests(StaticLiveServerTestCase):
     def setUp(self) -> None:
-        edge_options = webdriver.EdgeOptions()
-        edge_options.add_argument("--no-sandbox")
-        edge_options.add_argument("--disable-dev-shm-usage")
-        edge_options.add_argument("--headless")
-
-        self.driver = webdriver.Edge(
-            service=Service(EDGE_DRIVER_PATH),
-            options=edge_options
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        self.driver = webdriver.Chrome(
+            service=Service(ChromeDriverManager().install()), options=chrome_options
         )
         self.driver.implicitly_wait(5)
 
