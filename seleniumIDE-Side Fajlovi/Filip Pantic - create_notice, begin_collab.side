@@ -1,0 +1,204 @@
+{
+  "id": "823da1c5-32d8-4a7a-8164-1973fd2970d8",
+  "version": "2.0",
+  "name": "project_vafl",
+  "url": "http://127.0.0.1:8000/view_ad/1",
+  "tests": [{
+    "id": "f9856a34-45f0-41f3-b67c-4138a29e8e4f",
+    "name": "create_notice",
+    "commands": [{
+      "id": "faabc704-c186-43e5-be64-f6eec3234b3e",
+      "comment": "",
+      "command": "open",
+      "target": "http://127.0.0.1:8000/create_ad/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8c3b0329-c6c6-4aab-9d6b-cc836f85c08a",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1295x687",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ba308083-958b-4566-8b75-20c9cd7505d7",
+      "comment": "",
+      "command": "click",
+      "target": "name=naziv_oglasa",
+      "targets": [
+        ["name=naziv_oglasa", "name"],
+        ["css=.form-group:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='naziv_oglasa']", "xpath:attributes"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "8341c2c3-f13e-4c60-a8ca-63ea58a0acfa",
+      "comment": "",
+      "command": "type",
+      "target": "name=naziv_oglasa",
+      "targets": [
+        ["name=naziv_oglasa", "name"],
+        ["css=.form-group:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='naziv_oglasa']", "xpath:attributes"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": "pomoc"
+    }, {
+      "id": "f9274ad4-a011-4c17-8e34-6ee94675a570",
+      "comment": "",
+      "command": "click",
+      "target": "name=predmet",
+      "targets": [
+        ["name=predmet", "name"],
+        ["css=.form-group:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='predmet']", "xpath:attributes"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "fbf6fd37-fd0a-45af-aa63-be9c37786188",
+      "comment": "",
+      "command": "type",
+      "target": "name=predmet",
+      "targets": [
+        ["name=predmet", "name"],
+        ["css=.form-group:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='predmet']", "xpath:attributes"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "psi"
+    }, {
+      "id": "bf4a6fae-2209-4d43-9048-fe338d67ad79",
+      "comment": "",
+      "command": "click",
+      "target": "name=tip_pomoci",
+      "targets": [
+        ["name=tip_pomoci", "name"],
+        ["css=select", "css:finder"],
+        ["xpath=//select[@name='tip_pomoci']", "xpath:attributes"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "3426c1c2-e7b7-4c75-8389-41569ff0b0d6",
+      "comment": "",
+      "command": "select",
+      "target": "name=tip_pomoci",
+      "targets": [],
+      "value": "label=Pomoć pri učenju"
+    }, {
+      "id": "2d4df3a9-bd0c-4bcb-98f3-db69c2539bc5",
+      "comment": "",
+      "command": "click",
+      "target": "css=option:nth-child(3)",
+      "targets": [
+        ["css=option:nth-child(3)", "css:finder"],
+        ["xpath=//option[@value='Pomoc pri ucenju']", "xpath:attributes"],
+        ["xpath=//option[3]", "xpath:position"],
+        ["xpath=//option[contains(.,'Pomoć pri učenju')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "0bc6862f-4497-4d57-a5ef-ecbe1e4d589d",
+      "comment": "",
+      "command": "click",
+      "target": "name=opis",
+      "targets": [
+        ["name=opis", "name"],
+        ["css=textarea", "css:finder"],
+        ["xpath=//textarea[@name='opis']", "xpath:attributes"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d279c62f-be15-4817-bf54-e5cbfa35af5d",
+      "comment": "",
+      "command": "type",
+      "target": "name=opis",
+      "targets": [
+        ["name=opis", "name"],
+        ["css=textarea", "css:finder"],
+        ["xpath=//textarea[@name='opis']", "xpath:attributes"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": "molim vas pomozite"
+    }, {
+      "id": "facb9f5a-0552-4a38-8011-6fd8e89b8e79",
+      "comment": "",
+      "command": "click",
+      "target": "name=tagovi",
+      "targets": [
+        ["name=tagovi", "name"],
+        ["css=.form-group:nth-child(7) > input", "css:finder"],
+        ["xpath=//input[@name='tagovi']", "xpath:attributes"],
+        ["xpath=//div[6]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d77ac9c6-51ff-4687-8c2e-8bb35cb0bba1",
+      "comment": "",
+      "command": "type",
+      "target": "name=tagovi",
+      "targets": [
+        ["name=tagovi", "name"],
+        ["css=.form-group:nth-child(7) > input", "css:finder"],
+        ["xpath=//input[@name='tagovi']", "xpath:attributes"],
+        ["xpath=//div[6]/input", "xpath:position"]
+      ],
+      "value": "psi"
+    }, {
+      "id": "e3605e20-dab8-4470-942d-9e9eb6ca2a2a",
+      "comment": "",
+      "command": "click",
+      "target": "css=.btn:nth-child(8)",
+      "targets": [
+        ["css=.btn:nth-child(8)", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Postavi oglas')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "2995d401-94a6-47e9-977c-5b1b0eb5b0ee",
+    "name": "begin_collab",
+    "commands": [{
+      "id": "5c27e77c-7497-4781-bc43-bb7bc3c4b3ce",
+      "comment": "",
+      "command": "open",
+      "target": "http://127.0.0.1:8000/view_ad/1",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "91d2c94e-529e-4735-aebe-bfb4a95c81a5",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "550x672",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "451087ac-0590-4ea0-a3eb-4e3f774f63a7",
+      "comment": "",
+      "command": "click",
+      "target": "css=.btn",
+      "targets": [
+        ["css=.btn", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Pošalji zahtev')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "580f3bcb-ee4d-4ad9-8ca4-235b47f581e7",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": []
+  }],
+  "urls": ["http://127.0.0.1:8000/", "http://127.0.0.1:8000/create_ad/", "http://127.0.0.1:8000/view_ad/1"],
+  "plugins": []
+}

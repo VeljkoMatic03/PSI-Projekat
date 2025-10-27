@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.admindocs',
     'app_andjela.apps.AppAndjelaConfig',
     'app_luka.apps.AppLukaConfig',
     'app_filip.apps.AppFilipConfig',
@@ -158,3 +159,4 @@ EMAIL_HOST_USER = 'studybuddy.etf@gmail.com'
 EMAIL_HOST_PASSWORD = 'iein hkne ekxo mflg'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 AUTH_PASSWORD_VALIDATORS = []
+LOGIN_URL = 'login'

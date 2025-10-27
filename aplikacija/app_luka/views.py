@@ -1,6 +1,7 @@
 import base64,json
 from datetime import date
 
+from django.contrib.auth.decorators import login_required
 from django.db.models import Avg
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -9,6 +10,7 @@ from shared_app.models import Notice, Student, Tutor, Request, Collaboration, Ta
 
 
 # Create your views here.
+@login_required
 def create_ad(request):
     """
     Prikazuje stranicu za kreiranje :model:`shared_app.Notice`. |
@@ -120,6 +122,7 @@ def search_ads(request):
 
     return render(request,'search-ads.html',{'myType':myType,'oglasi':filteredOglasi})
 
+@login_required
 def view_ad(request,id):
     """
     Prikazuje stranicu za detaljan prikaz :model:`shared_app.Notice` na osnovu id-a koji se prosledjuje view-u.|
