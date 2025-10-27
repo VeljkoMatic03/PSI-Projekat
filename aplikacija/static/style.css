@@ -1,11 +1,11 @@
 /* Luka Zdravic */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
+/*body {*/
+/*    font-family: Arial, sans-serif;*/
+/*    background-color: #f0f0f0;*/
+/*    color: #333;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*}*/
 
 .container {
     width: 800px;
@@ -13,6 +13,20 @@ body {
     padding: 20px;
     background-color: #fff;
     border: 1px solid #ccc;
+}
+
+.container-flex {
+    width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    display: flex;
+}
+
+.left {
+    horiz-align: left;
+    vertical-align: middle;
 }
 
 h1, h2, h3 {
@@ -41,6 +55,7 @@ a {
     font-weight: bold;
     text-decoration: none;
     color: #000;
+    vertical-align: middle;
 }
 .main-header nav {
     float: right;
@@ -222,4 +237,43 @@ textarea {
     height: 50px;
     overflow-y: scroll;
     padding: 10px;
+}
+
+.logo-img {
+    height: 70px;
+}
+
+body {
+    background: #EEF3FC;
+    color: #1e1f22;
+}
+
+.hero {
+    min-height: calc(100vh - 56px);
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #4A6CF7;
+    border-color: #4A6CF7;
+}
+
+.btn-primary:hover {
+    background-color: #3A57D0;
+    border-color: #3A57D0;
+}
+
+.logo-img {
+    height: 36px;
+}
+header {
+    background: #EEF3FC !important; /* isto kao body */
+}
+
+.navbar {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }

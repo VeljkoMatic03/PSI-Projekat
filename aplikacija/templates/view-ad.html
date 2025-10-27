@@ -1,5 +1,3 @@
-<!--Luka Zdravic-->
-
 {% load static %}
 
 <!DOCTYPE html>
@@ -7,107 +5,172 @@
 <head>
     <meta charset="UTF-8">
     <title>Prikaz Oglasa</title>
-    <link rel="stylesheet" href="../static/style.css">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
+
 <body>
-    <header class="main-header">
-        <div class="container">
-            <a href="{% url 'home' tip=myType %}" class="logo">StudyBuddy</a>
-            <nav><a href="{% url 'search_ads' %}">Nazad na pretragu</a></nav>
+
+<!-- ✅ HEADER -->
+<header>
+    <nav class="navbar navbar-expand-lg container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'home' tip=myType %}">
+            <img src="{% static 'logo1.png' %}" alt="StudyBuddy logo" class="logo-img">
+            <span class="fw-semibold text-dark">StudyBuddy</span>
+        </a>
+
+        <div class="ms-auto">
+            <a href="{% url 'search_ads' %}" class="btn btn-outline-secondary">Nazad</a>
         </div>
-    </header>
-    <main class="container">
-        <h1>{{ oglas.title }}</h1>
-        <h3>Predmet: {{ oglas.subject }}</h3>
-        <p><b>Tip pomoci: </b> {{ oglas.type }}</p>
-        <p><b>Postavio:</b> {{ studentIme }} {{ studentPrezime }}</p>
-        <hr>
-        <h3>Opis</h3>
+    </nav>
+</header>
+
+
+<!-- ✅ MAIN -->
+<main class="container py-5">
+
+    <h2 class="fw-bold mb-3">{{ oglas.title }}</h2>
+
+    <div class="text-muted mb-3">
+        <b>Predmet:</b> {{ oglas.subject }} <br>
+        <b>Tip pomoći:</b> {{ oglas.type }} <br>
+        <b>Postavio:</b> {{ studentIme }} {{ studentPrezime }}
+    </div>
+
+    <hr>
+
+    <!-- ✅ OPIS -->
+    <section class="mb-4">
+        <h4 class="fw-bold">Opis</h4>
         <p>{{ oglas.description }}</p>
-        <hr>
-        <h3>Prilozi</h3>
+    </section>
+
+    <hr>
+
+    <!-- ✅ PRILOZI -->
+    <section class="mb-4">
+        <h4 class="fw-bold">Prilozi</h4>
 
         {% if oglas.attachment %}
             <form method="get" action="{% url 'download_attachment' oglas.idnotice %}">
-                <button type="submit" class="btn" style="background-color:#A6D785;">Preuzmi prilog</button>
+                <button type="submit" class="btn btn-primary">
+                    📄 Preuzmi prilog
+                </button>
             </form>
         {% else %}
-            <p>Nema dodatih priloga.</p>
+            <p class="text-muted">Nema dodatih priloga.</p>
         {% endif %}
+    </section>
 
-        <hr>
+    <hr>
 
-        {% if gotovaSaradnja %}
-            {% if request.user.username == usernameVlasnika or jaPomogao %}
-                <div style="display: flex; justify-content: center; margin-top: 20px;">
-                    <form method="get" action="{% url 'rate' oglas.idnotice %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn" style="width:auto; background-color:#A6D785;">
-                            Oceni
-                        </button>
-                    </form>
-                </div>
-            {% endif %}
+    <!-- ✅ OCENJIVANJE — posle saradnje -->
+    {% if gotovaSaradnja %}
+        {% if request.user.username == usernameVlasnika or jaPomogao %}
+            <div class="text-center mb-4">
+                <form method="get" action="{% url 'rate' oglas.idnotice %}">
+                    {% csrf_token %}
+                    <button class="btn btn-success btn-lg px-4">
+                        ⭐ Oceni
+                    </button>
+                </form>
+            </div>
         {% endif %}
+    {% endif %}
 
-        {% if request.user.username == usernameVlasnika and gotovaSaradnja is None %}
-        <h3>Prijavljeni tutori</h3>
-        <div class="item-list">
-            {% for tutor in tutoriNeprihvaceni %}
-                <div class="item" style="display: flex; justify-content: space-between; align-items: center;">
-                    <span><a href="#">{{ tutor.name }} {{ tutor.surname }}</a></span>
 
-                    <div style="display: flex; gap: 8px;">
-                        <form method="post" action="{% url 'prihvati_zahtev' oglas.idnotice %}" style="display:inline;">
-                            {% csrf_token %}
-                            <input type="hidden" name="tutor_id" value="{{ tutor.iduser_id }}">
+    <!-- ✅ LISTA TUTORA (za vlasnika oglasa) -->
+    {% if request.user.username == usernameVlasnika and gotovaSaradnja is None %}
+        
+        <h4 class="fw-bold mt-5">Prijavljeni tutori</h4>
+        
+        {% if tutoriNeprihvaceni %}
+            <div class="list-group my-3">
+                {% for tutor in tutoriNeprihvaceni %}
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+
+                        <span>
+                            {{ tutor.name }} {{ tutor.surname }}
+                        </span>
+
+                        <div class="d-flex gap-2">
                             {% if oglas.idtutor is None %}
-                            <button type="submit" class="btn" style="width:auto; background-color:#A6D785;">
-                                Prihvati
-                            </button>
+                                <form method="post" action="{% url 'prihvati_zahtev' oglas.idnotice %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="tutor_id" value="{{ tutor.iduser_id }}">
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        ✅ Prihvati
+                                    </button>
+                                </form>
                             {% endif %}
-                        </form>
 
-                        <form method="post" action="{% url 'odbij_zahtev' oglas.idnotice %}" style="display:inline;">
+                            <form method="post" action="{% url 'odbij_zahtev' oglas.idnotice %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="tutor_id" value="{{ tutor.iduser_id }}">
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    ❌ Odbij
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">Nema prijavljenih tutora.</p>
+        {% endif %}
+
+
+        <h4 class="fw-bold mt-5">Aktivna saradnja</h4>
+
+        {% if tutoriPrihvaceni %}
+            <div class="list-group my-3">
+                {% for tutor in tutoriPrihvaceni %}
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        
+                        <span>{{ tutor.name }} {{ tutor.surname }}</span>
+
+                        <form method="post" action="{% url 'prekini_saradnju' oglas.idnotice %}">
                             {% csrf_token %}
                             <input type="hidden" name="tutor_id" value="{{ tutor.iduser_id }}">
-                            <button type="submit" class="btn" style="width:auto; background-color:#FF7F7F;">
-                                Odbij
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                🛑 Prekini saradnju
                             </button>
                         </form>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-        <br>
-        <h3>Aktivna saradnja</h3>
-        <div class="item-list">
-            {% for tutor in tutoriPrihvaceni %}
-                <div class="item" style="display: flex; justify-content: space-between; align-items: center;">
-                    <span><a href="#">{{ tutor.name }} {{ tutor.surname }}</a></span>
 
-                    <form method="post" action="{% url 'prekini_saradnju' oglas.idnotice %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="tutor_id" value="{{ tutor.iduser_id }}">
-                        <button type="submit" class="btn" style="width: auto; background-color: #FF7F7F;">
-                            Prekini saradnju
-                        </button>
-                    </form>
-                </div>
-            {% endfor %}
-        </div>
-        <hr>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">Nema aktivne saradnje.</p>
         {% endif %}
-        {% if jeTutor and not poslaoZahtev and not gotovaSaradnja%}
-            <h3>Pošalji zahtev za saradnju</h3>
+
+        <hr>
+    {% endif %}
+
+
+    <!-- ✅ TUTOR MOŽE DA POŠALJE ZAHTEV -->
+    {% if jeTutor and not poslaoZahtev and not gotovaSaradnja %}
+        <div class="mt-4">
+            <h4 class="fw-bold">Pošalji zahtev za saradnju</h4>
             <form method="post" action="{% url 'posalji_zahtev' oglas.idnotice %}">
                 {% csrf_token %}
                 <input type="hidden" name="tutor_username" value="{{ request.user.username }}">
-                <button type="submit" class="btn" style="width:auto; background-color:#A6D785;">
-                    Pošalji zahtev
+                <button type="submit" class="btn btn-primary mt-2">
+                    📬 Pošalji zahtev
                 </button>
             </form>
-        {% endif %}
-    </main>
+        </div>
+    {% endif %}
+
+</main>
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

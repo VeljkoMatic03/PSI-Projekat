@@ -8,6 +8,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 from datetime import date
@@ -65,7 +67,18 @@ class TutorTest(StaticLiveServerTestCase):
         driver.find_element(By.NAME, "edukacija").send_keys("ETF")
         driver.find_element(By.NAME, "projekti").send_keys("StudyBuddy")
         driver.find_element(By.NAME, "iskustvo").send_keys("Bez prakse")
-        driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+        submit_btn = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
+
+        WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type='submit']"))
+        )
+
+        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", submit_btn)
+
+        try:
+            submit_btn.click()
+        except:
+            driver.execute_script("arguments[0].click();", submit_btn)
 
         time.sleep(3)
         self.assertIn('/dashboard_tutor', driver.current_url)

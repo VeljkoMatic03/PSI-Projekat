@@ -1,5 +1,3 @@
-<!--Veljko Matić-->
-
 {% load static %}
 
 <!DOCTYPE html>
@@ -7,101 +5,127 @@
 <head>
     <meta charset="UTF-8">
     <title>Ocenjivanje</title>
-    <link rel="stylesheet" href="{% static "style.css" %}">
 
-    <style>
-        .star-rating-wrapper {
-            text-align: center;
-            margin: 15px 0;
-        }
+    <!-- ✅ Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        .star-rating {
-            direction: rtl;
-            display: inline-flex;
-            font-size: 2em;
-        }
-
-        .star-rating input {
-            display: none;
-        }
-
-        .star-rating label {
-            color: #ccc;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .star-rating input:checked ~ label {
-            color: gold;
-        }
-
-        .star-rating label:hover,
-        .star-rating label:hover ~ label {
-            color: gold;
-        }
-
-        textarea {
-            font-family: inherit;
-        }
-    </style>
+    <!-- ✅ Custom CSS -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
+
 <body>
-    <header class="main-header">
-        <div class="container">
-            <a href="{% url 'home' tip=myType %}" class="logo">StudyBuddy</a>
-            <nav><a href="{% url 'search_ads' %}">Nazad na pretragu</a></nav>
+
+<!-- ✅ HEADER -->
+<header>
+    <nav class="navbar navbar-expand-lg container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'home' tip=myType %}">
+            <img src="{% static 'logo1.png' %}" alt="StudyBuddy logo" class="logo-img">
+            <span class="fw-semibold text-dark">StudyBuddy</span>
+        </a>
+
+        <div class="ms-auto">
+            <a href="{% url 'search_ads' %}" class="btn btn-outline-secondary">Nazad</a>
         </div>
-    </header>
-    <main class="container">
-        <h1>{{ notice.title }}</h1>
-        <h3>Predmet: {{ notice.subject }}</h3>
-        <p><b>Student:</b> {{ student.username }}</p>
+    </nav>
+</header>
+
+
+<!-- ✅ MAIN -->
+<main class="container py-4">
+
+    <h2 class="fw-bold mb-1">{{ notice.title }}</h2>
+    <p class="text-muted mb-4">Predmet: {{ notice.subject }}</p>
+
+    <div class="mb-3">
+        <b>Student:</b> {{ student.username }} <br>
         {% if tutor == None %}
-            <p><b>Tutor:</b> Saradnja nije gotova</p>
+            <b>Tutor:</b> Saradnja nije gotova
         {% else %}
-            <p><b>Tutor:</b> {{ tutor.username }}</p>
+            <b>Tutor:</b> {{ tutor.username }}
         {% endif %}
+    </div>
 
-        <h3>Opis oglasa</h3>
-        <p class="opis">
-            {{ notice.description }}
-        </p>
-        <hr>
+    <div class="card p-3 shadow-sm mb-4">
+        <h5 class="fw-bold mb-2">Opis oglasa</h5>
+        <p class="mb-0">{{ notice.description }}</p>
+    </div>
 
-        {% if notFinished %}
-            <h2>Saradnja nije gotova</h2>
-        {% elif notAllowed %}
-            <h2>Nije vasa saradnja, vratite se nazad</h2>
-        {% elif rated %}
-            <h2>Vec ste ocenili ovu saradnju</h2>
-        {% else %}
-            <h2>Ocenite saradnju</h2>
-            <form method="post">
-                {% csrf_token %}
 
-                <div class="star-rating-wrapper">
-                    <div class="star-rating">
-                        <input type="radio" id="star5" name="rating" value="5">
-                        <label for="star5">★</label>
-                        <input type="radio" id="star4" name="rating" value="4">
-                        <label for="star4">★</label>
-                        <input type="radio" id="star3" name="rating" value="3">
-                        <label for="star3">★</label>
-                        <input type="radio" id="star2" name="rating" value="2">
-                        <label for="star2">★</label>
-                        <input type="radio" id="star1" name="rating" value="1" checked>
-                        <label for="star1">★</label>
-                    </div>
+    <!-- ✅ Poruke zbog zaštite logike -->
+    {% if notFinished %}
+        <div class="alert alert-warning text-center">⏳ Saradnja nije gotova</div>
+
+    {% elif notAllowed %}
+        <div class="alert alert-danger text-center">🚫 Nije vaša saradnja</div>
+
+    {% elif rated %}
+        <div class="alert alert-success text-center">✅ Već ste ocenili ovu saradnju</div>
+
+
+    {% else %}
+    <!-- ✅ FORMA ZA OCENU -->
+    <div class="card shadow-sm p-4">
+        <h4 class="fw-bold text-center mb-4">Ocenite saradnju</h4>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- ⭐ Zvezdice -->
+            <div class="text-center mb-3">
+                <div class="star-rating d-inline-flex" style="direction: rtl; font-size: 2rem;">
+                    {% for i in "54321" %}
+                        <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}"
+                               style="display:none;">
+                        <label for="star{{ i }}" class="mx-1"
+                               style="cursor:pointer; color:#ccc; transition:0.2s;">★</label>
+                    {% endfor %}
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label for="comment"><b>Komentar (opciono):</b></label>
-                    <textarea id="comment" name="comment" rows="4" placeholder="Unesite komentar..."></textarea>
-                </div>
+            <!-- Komentar -->
+            <div class="mb-3">
+                <label for="comment" class="form-label fw-bold">Komentar (opciono)</label>
+                <textarea id="comment" name="comment" rows="4"
+                          class="form-control"
+                          placeholder="Unesite komentar..."></textarea>
+            </div>
 
-                <button type="submit" class="btn btn-accept">Oceni</button>
-            </form>
-        {% endif %}
-    </main>
+            <button type="submit" class="btn btn-success w-100">Oceni ✔</button>
+        </form>
+
+    </div>
+    {% endif %}
+
+</main>
+
+
+
+<!-- ⭐ JavaScript za hover & update boja zvezdica -->
+<script>
+document.querySelectorAll('.star-rating label').forEach(label => {
+    label.addEventListener('mouseover', () => {
+        let val = label.getAttribute('for').replace('star', '');
+        document.querySelectorAll('.star-rating label').forEach(l => {
+            if (l.getAttribute('for').replace('star','') <= val)
+                l.style.color = '#ffc107';
+            else
+                l.style.color = '#ccc';
+        });
+    });
+    label.addEventListener('mouseleave', () => {
+        let checked = document.querySelector('.star-rating input:checked');
+        let val = checked ? checked.value : 1;
+        document.querySelectorAll('.star-rating label').forEach(l => {
+            if (l.getAttribute('for').replace('star','') <= val)
+                l.style.color = '#ffc107';
+            else
+                l.style.color = '#ccc';
+        });
+    });
+});
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 import base64
 from io import BytesIO
+from reportlab.lib.utils import ImageReader
 
 import requests
 from django.contrib.auth.decorators import login_required
@@ -141,7 +142,6 @@ def edit_cv(request):
 
     return render(request, 'edit-cv.html', context)
 
-@login_required()
 def generate_cv(cv):
     name = cv.name
     surname = cv.surname
@@ -153,9 +153,7 @@ def generate_cv(cv):
 
     img_reader = None
     if picture:
-        from io import BytesIO
-        from reportlab.lib.utils import ImageReader
-        import base64
+
 
         if isinstance(picture, bytes):
             img_data = picture
