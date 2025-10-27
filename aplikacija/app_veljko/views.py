@@ -1,4 +1,7 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+
+from app_filip.views import login_user
 from shared_app.models import MyUser, Verification, Tutor, Admin, Student, Rating, Notice, Collaboration, Cv
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
@@ -13,6 +16,7 @@ def adminpanel(request):
     """
     return render(request, 'dashboard-admin.html')
 
+@login_required
 def verifyTutor(request):
     """
     Omogućava administratoru da potvrdi ili odbije tutora. |
@@ -38,6 +42,7 @@ def verifyTutor(request):
         tutors.append(verification.iduser)
     return render(request, 'admin-verify-tutor.html', {'tutors': tutors})
 
+@login_required()
 def removeUser(request):
     """
    Omogućava administratoru pretragu i uklanjanje korisnika. |
@@ -84,6 +89,7 @@ def removeUser(request):
         msgnf = None
     return render(request, 'admin-remove-user.html', {'user': user, 'msgnf': msgnf, 'msg_user_deleted': msg_user_deleted})
 
+@login_required()
 def logout_user(request):
     """
     Odjavljuje trenutno prijavljenog korisnika i preusmerava na početnu stranicu. |
@@ -92,6 +98,7 @@ def logout_user(request):
     logout(request)
     return redirect('homepage')
 
+@login_required()
 def public_profile(request):
     """
     Prikazuje javni profil korisnika (student ili tutor). |
@@ -210,6 +217,7 @@ def home(request, tip):
         return redirect('adminpanel')
     return redirect('homepage')
 
+@login_required()
 def rate(request, id):
     """
     Omogućava ocenjivanje korisnika nakon saradnje. |
