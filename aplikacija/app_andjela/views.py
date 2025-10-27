@@ -2,6 +2,7 @@ import base64
 from io import BytesIO
 
 import requests
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from reportlab.lib import colors
@@ -14,12 +15,14 @@ from shared_app.models import Cv, Tutor, MyUser, Student
 
 # Create your views here.
 
+@login_required
 def dashboard_tutor(request):
     """
     Ucitava stranicu :template:`dashboard-tutor.html` sa osnovnim funkcionalnostima ulogovanog tutora
     """
     return render(request, 'dashboard-tutor.html')
 
+@login_required
 def create_cv(request):
     """
     Kreira CV za trenutno prijavljenog tutora.
@@ -65,6 +68,7 @@ def create_cv(request):
 
     return render(request, 'create-cv.html')
 
+@login_required()
 def edit_cv(request):
     """
     Omogućava tutorima da izmene svoj postojeći CV.
@@ -137,6 +141,7 @@ def edit_cv(request):
 
     return render(request, 'edit-cv.html', context)
 
+@login_required()
 def generate_cv(cv):
     name = cv.name
     surname = cv.surname
@@ -255,6 +260,7 @@ def generate_cv(cv):
     return response
 
 
+@login_required()
 def download_cv(request):
     """
     Omogućava tutoru da preuzme svoj CV.
@@ -273,6 +279,7 @@ def download_cv(request):
     response = generate_cv(cv)
     return response
 
+@login_required()
 def download_tutors_cv(request, username):
     """
     Omogućava preuzimanje CV-a nekog tutora na osnovu njegovog korisničkog imena.
@@ -291,6 +298,7 @@ def download_tutors_cv(request, username):
 
     response = generate_cv(cv)
     return response
+@login_required()
 def wiki_search(request):
     """
     Pretražuje Wikipedia API na osnovu unetog upita i prikazuje rezultate na odgovarajućem panelu.

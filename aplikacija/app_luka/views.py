@@ -49,6 +49,7 @@ def create_ad(request):
 
         return redirect('dashboard-student')
     return render(request,'create-ad.html')
+@login_required
 def dashboard_student(request):
     """
     Prikazuje dashboard za :model:`shared_app.Student`. |
@@ -57,6 +58,7 @@ def dashboard_student(request):
     """
     return render(request,'dashboard-student.html')
 
+@login_required
 def search_ads(request):
     """
     Prikazuje stranicu za pretrazivanje :model:`shared_app.Notice`. |
@@ -107,7 +109,7 @@ def search_ads(request):
             o for o in filteredOglasi
             if o.applied_set.filter(idtag__value__in=tags).exists()
         ]
-    if len(minRating)>0:
+    if minRating:
         minRating = float(minRating)
         filteredOglasi = [
             o for o in filteredOglasi
@@ -175,6 +177,7 @@ def view_ad(request,id):
         tutoriPrihvaceni.append(zahtev.idtutor)
 
     return render(request,'view-ad.html',{'myType':myType,'oglas':oglas,'studentIme':student.name, 'studentPrezime':student.surname, 'usernameVlasnika':student.iduser.username, 'jeTutor':jeTutor, 'tutoriPrihvaceni':tutoriPrihvaceni,'tutoriNeprihvaceni':tutoriNeprihvaceni, 'poslaoZahtev' : poslaoZahtev, 'gotovaSaradnja':gotovaSaradnja, 'jaPomogao':jaPomogao})
+@login_required()
 def prekini_saradnju(request,id):
     """
     Funckionalnost koja se koristi za prekidanje saradnje izmedju :model:`shared_app.Student` i :model:`shared_app.Tutor` na osnovu id-a oglasa
@@ -195,6 +198,7 @@ def prekini_saradnju(request,id):
 
     return redirect('view_ad', id=id)
 
+@login_required()
 def prihvati_zahtev(request, id):
     """
     Funckionalnost koja se koristi za pocetak saradnje izmedju :model:`shared_app.Student` i :model:`shared_app.Tutor` na osnovu id-a oglasa
@@ -217,6 +221,7 @@ def prihvati_zahtev(request, id):
 
     return redirect('view_ad', id=id)
 
+@login_required()
 def odbij_zahtev(request,id):
     """
     Funckionalnost koja se koristi za odbijanje zahteva za saradnju izmedju :model:`shared_app.Student` i :model:`shared_app.Tutor` na osnovu id-a oglasa
@@ -230,6 +235,7 @@ def odbij_zahtev(request,id):
         zahtev.save()
     return redirect('view_ad',id=id)
 
+@login_required()
 def posalji_zahtev(request, id):
     """
     Funckionalnost koja se koristi za slanje zahteva za saradnju izmedju :model:`shared_app.Student` i :model:`shared_app.Tutor` na osnovu id-a oglasa
@@ -245,6 +251,7 @@ def posalji_zahtev(request, id):
 
     return redirect('search_ads')
 
+@login_required()
 def download_attachment(request, id):
     """
     Funckionalnost koja se koristi za preuzimanje priloga za odredjen :model:`shared_app.Notice` ukoliko taj oglas ima priloge.
