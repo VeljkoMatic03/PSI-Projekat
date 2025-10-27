@@ -1,3 +1,10 @@
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+
+import time
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from django.urls import reverse
@@ -155,3 +162,111 @@ class AdminUserTutorFuncionalitiesTests(TestCase):
         rating = Rating.objects.get(idcollaboration=collab, idratinguser=self.target_user)
         self.assertEqual(rating.value, 5)
         self.assertEqual(rating.comment, "Super tutor")
+
+User = get_user_model()
+EDGE_DRIVER_PATH = r"C:\Users\lukaz\Downloads\edgedriver_win64\msedgedriver.exe"
+
+class AdminPanelTests(StaticLiveServerTestCase):
+    def setUp(self) -> None:
+        edge_options = webdriver.EdgeOptions()
+        edge_options.add_argument("--no-sandbox")
+        edge_options.add_argument("--disable-dev-shm-usage")
+        edge_options.add_argument("--headless")
+
+        self.driver = webdriver.Edge(
+            service=Service(EDGE_DRIVER_PATH),
+            options=edge_options
+        )
+        self.driver.implicitly_wait(5)
+
+        self.user_admin = User.objects.create_superuser(
+            username="admin",
+            email="admin@example.com",
+            password="admin123"
+        )
+
+        self.my_user_admin = MyUser.objects.create(
+            username="admin",
+            email="admin@example.com",
+            password=make_password("admin123"),
+            isactive=1,
+            isbanned=0
+        )
+
+        self.user_toDelete = User.objects.create_user(
+            username="target_user",
+            email="target@example.com",
+            password="password123"
+        )
+
+        self.target_user = MyUser.objects.create(
+            username="target_user",
+            email="target@example.com",
+            password=make_password("password123"),
+            isactive=1,
+            isbanned=0
+        )
+
+        self.user_tutor = User.objects.create_user(
+            username="target_tutor",
+            email="target_tutor@example.com",
+            password="password123"
+        )
+
+        self.target_tutor = MyUser.objects.create(
+            username="target_tutor",
+            email="target_tutor@example.com",
+            password=make_password("password123"),
+            isactive=1,
+            isbanned=0
+        )
+
+        self.admin = Admin.objects.create(iduser=self.my_user_admin)
+        self.toDelete=Student.objects.create(iduser=self.target_user)
+        self.tutorVerify=Tutor.objects.create(iduser=self.target_tutor,name="TutorTest",surname="Test",dateofbirth="2025-10-14",isverified=0)
+        Verification.objects.create(iduser=self.tutorVerify)
+
+    def tearDown(self) -> None:
+        self.driver.quit()
+
+    def test_admin_remove_user(self):
+        driver = self.driver
+        driver.get(f"{self.live_server_url}/login/")
+
+        driver.find_element(By.NAME, "username").send_keys("admin")
+        driver.find_element(By.NAME, "password").send_keys("admin123")
+        driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+
+        time.sleep(2)
+        self.assertIn("/admin_panel", driver.current_url)
+
+        driver.get(f"{self.live_server_url}/admin_panel/remove/")
+        driver.find_element(By.NAME, "username").send_keys("target_user")
+        driver.find_element(By.NAME, "search").click()
+
+        time.sleep(1)
+        driver.find_element(By.NAME, "remove").click()
+        time.sleep(2)
+
+        self.target_user.refresh_from_db()
+        self.assertEqual(self.target_user.isactive, 0)
+        self.assertEqual(self.target_user.isbanned, 1)
+
+    def test_admin_verify_tutor(self):
+        driver = self.driver
+        driver.get(f"{self.live_server_url}/login/")
+
+        driver.find_element(By.NAME, "username").send_keys("admin")
+        driver.find_element(By.NAME, "password").send_keys("admin123")
+        driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+
+        time.sleep(2)
+        self.assertIn("/admin_panel", driver.current_url)
+
+        driver.get(f"{self.live_server_url}/admin_panel/verify/")
+        driver.find_element(By.CSS_SELECTOR, "button[value='verify']").click()
+
+        time.sleep(2)
+        self.tutorVerify.refresh_from_db()
+        self.assertEqual(self.tutorVerify.isverified, 1)
+        self.assertFalse(Verification.objects.filter(iduser=self.tutorVerify).exists())
