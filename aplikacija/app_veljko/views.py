@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from shared_app.models import MyUser, Verification, Tutor, Admin, Student, Rating, Notice, Collaboration
+from shared_app.models import MyUser, Verification, Tutor, Admin, Student, Rating, Notice, Collaboration, Cv
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 
@@ -109,6 +109,7 @@ def public_profile(request):
     user = None
     type = None
     myProfile = True
+    hasCV = False
     if username:
         user = User.objects.filter(username=username)
         if not user.exists():
@@ -120,6 +121,8 @@ def public_profile(request):
         elif Tutor.objects.filter(iduser=user).exists():
             type = 'Tutor'
             user = Tutor.objects.filter(iduser=user).first()
+            if Cv.objects.filter(idtutor__iduser=user.iduser).exists():
+                hasCV = True
         elif Admin.objects.filter(iduser=user).exists():
             return render(request, 'index.html')
         if user.iduser.username == request.user.username:
@@ -190,7 +193,8 @@ def public_profile(request):
                                                    'countRating': countRating,
                                                    'notices': listOfNotices,
                                                    'myType': myType,
-                                                   'comments': comments})
+                                                   'comments': comments,
+                                                   "hasCV": hasCV})
 def home(request, tip):
     """
     Preusmerava korisnika na odgovarajući dashboard na osnovu tipa. |
